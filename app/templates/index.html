@@ -3,13 +3,13 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nova AI</title>
 
 <style>
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: grid;
     place-items: center;
     background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
@@ -28,6 +28,7 @@ body {
     box-shadow: 0 0 25px rgba(0, 200, 255, 0.3);
     transition: transform 0.3s ease;
 }
+
 .card:hover {
     transform: translateY(-5px);
 }
@@ -57,9 +58,15 @@ p {
     box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
+
 .mic:hover {
     transform: scale(1.1);
     box-shadow: 0 0 30px rgba(255, 0, 255, 0.7);
+}
+
+.mic:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .status {
@@ -71,6 +78,7 @@ p {
 
 .song {
     margin-top: 15px;
+    min-height: 20px;
     font-size: 14px;
     color: #fff;
     background: linear-gradient(90deg, #00f0ff, #ff00ff);
@@ -78,22 +86,37 @@ p {
     border-radius: 12px;
     overflow: hidden;
     white-space: nowrap;
-    animation: ticker 8s linear infinite;
 }
 
 .listening {
     animation: pulse 1.2s infinite;
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 15px rgba(0, 200, 255, 0.6); }
-    50% { box-shadow: 0 0 35px rgba(255, 0, 255, 0.8); }
-    100% { box-shadow: 0 0 15px rgba(0, 200, 255, 0.6); }
+.player {
+    margin-top: 25px;
+    width: 100%;
+    display: none;
 }
 
-@keyframes ticker {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+.player iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+    border-radius: 12px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
+    }
+
+    50% {
+        box-shadow: 0 0 35px rgba(255, 0, 255, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
+    }
 }
 </style>
 </head>
@@ -103,17 +126,202 @@ p {
 <div class="card">
 
     <h2>Nova AI</h2>
+
     <p>Say a song name</p>
 
     <button id="mic" class="mic">🎙️</button>
 
-    <div id="status" class="status">Tap microphone</div>
+    <div id="status" class="status">
+        Tap microphone
+    </div>
+
     <div id="song" class="song"></div>
+
+    <div id="player" class="player">
+        <iframe
+            id="youtubePlayer"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
+    </div>
 
 </div>
 
+
 <script>
-// Your existing JavaScript logic stays the same
+
+const mic = document.getElementById("mic");
+const status = document.getElementById("status");
+const song = document.getElementById("song");
+
+const player = document.getElementById("player");
+const youtubePlayer = document.getElementById("youtubePlayer");
+
+
+// Check browser speech recognition support
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (!SpeechRecognition) {
+
+    status.textContent =
+        "Speech recognition is not supported";
+
+    mic.disabled = true;
+
+} else {
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+
+    // MICROPHONE BUTTON
+    mic.addEventListener("click", () => {
+
+        try {
+
+            recognition.start();
+
+            mic.classList.add("listening");
+
+            status.textContent = "Listening...";
+
+            song.textContent = "";
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    });
+
+
+    // SPEECH RESULT
+    recognition.onresult = async (event) => {
+
+        const command =
+            event.results[0][0].transcript.trim();
+
+
+        console.log("Recognized:", command);
+
+
+        status.textContent = "Searching...";
+
+        song.textContent = command;
+
+
+        try {
+
+            const response = await fetch(
+                "/youtube/play",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        command: command
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            console.log("Backend:", data);
+
+
+            if (!response.ok || !data.success) {
+
+                status.textContent =
+                    data.message ||
+                    "Song not found";
+
+                return;
+            }
+
+
+            // SONG FOUND
+            status.textContent =
+                "Playing: " + data.query;
+
+
+            song.textContent =
+                data.query;
+
+
+            // LOAD YOUTUBE
+            youtubePlayer.src = data.url;
+
+            player.style.display = "block";
+
+
+        } catch (error) {
+
+            console.error(
+                "Backend error:",
+                error
+            );
+
+            status.textContent =
+                "Could not connect to server";
+        }
+    };
+
+
+    // SPEECH ERROR
+    recognition.onerror = (event) => {
+
+        console.error(
+            "Speech error:",
+            event.error
+        );
+
+
+        if (event.error === "not-allowed") {
+
+            status.textContent =
+                "Microphone permission denied";
+
+        } else if (event.error === "no-speech") {
+
+            status.textContent =
+                "Didn't hear anything";
+
+        } else {
+
+            status.textContent =
+                "Microphone error: " +
+                event.error;
+        }
+
+
+        mic.classList.remove("listening");
+    };
+
+
+    // SPEECH ENDED
+    recognition.onend = () => {
+
+        mic.classList.remove("listening");
+
+    };
+
+}
+
 </script>
 
 </body>
