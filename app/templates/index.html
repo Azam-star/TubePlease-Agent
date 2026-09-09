@@ -19,8 +19,8 @@ body{
     font-family:Arial,sans-serif;
     color:white;
     background:
-      radial-gradient(circle at center,#43000f,transparent 40%),
-      linear-gradient(135deg,#020204,#100006,#020204);
+        radial-gradient(circle at center,#43000f,transparent 40%),
+        linear-gradient(135deg,#020204,#100006,#020204);
 }
 
 .logo{
@@ -32,6 +32,7 @@ body{
     gap:9px;
     font-size:22px;
     font-weight:bold;
+    z-index:10;
 }
 
 .logo-icon{
@@ -59,6 +60,7 @@ body{
     transform:translateX(-50%);
     font-size:22px;
     font-weight:bold;
+    z-index:10;
 }
 
 .brand span{
@@ -68,7 +70,9 @@ body{
 .main{
     display:flex;
     align-items:center;
-    gap:70px;
+    justify-content:center;
+    gap:90px;
+    transition:.5s;
 }
 
 .voice{
@@ -77,6 +81,21 @@ body{
     position:relative;
     display:grid;
     place-items:center;
+    border-radius:50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(55,0,12,.5),
+            rgba(5,0,4,.88)
+        );
+    box-shadow:
+        0 0 35px rgba(255,0,45,.25),
+        0 0 80px rgba(255,0,45,.12);
+    transition:.5s;
+}
+
+.main.video-visible .voice{
+    transform:translateX(-30px);
 }
 
 .ring{
@@ -86,9 +105,22 @@ body{
     animation:pulse 2s infinite;
 }
 
-.r1{width:320px;height:320px}
-.r2{width:265px;height:265px;animation-delay:.3s}
-.r3{width:215px;height:215px;animation-delay:.6s}
+.r1{
+    width:300px;
+    height:300px;
+}
+
+.r2{
+    width:250px;
+    height:250px;
+    animation-delay:.3s;
+}
+
+.r3{
+    width:200px;
+    height:200px;
+    animation-delay:.6s;
+}
 
 #mic{
     width:135px;
@@ -96,15 +128,29 @@ body{
     border:0;
     border-radius:50%;
     cursor:pointer;
-    background:radial-gradient(circle at 35% 25%,#ff92a4,#ff1744 55%,#650016);
-    box-shadow:0 0 35px #ff174477;
+    display:grid;
+    place-items:center;
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #ff92a4,
+            #ff1744 55%,
+            #650016
+        );
+    box-shadow:
+        0 0 35px #ff174477;
     z-index:2;
     transition:.2s;
 }
 
 #mic:hover{
     transform:scale(1.07);
-    box-shadow:0 0 55px #ff1744cc;
+    box-shadow:
+        0 0 55px #ff1744cc;
+}
+
+#mic.listening{
+    animation:listen 1s infinite;
 }
 
 .mic-icon{
@@ -112,49 +158,92 @@ body{
     height:60px;
 }
 
-.listening{
-    animation:listen 1s infinite;
-}
-
 .player{
     display:none;
-    width:500px;
+    width:320px;
+    height:320px;
+    border-radius:50%;
+    overflow:hidden;
+    border:2px solid #ff1744;
+    background:#000;
+    box-shadow:
+        0 0 35px #ff174455,
+        0 0 80px #ff174422;
+    animation:show .4s ease;
 }
 
 .player iframe{
     width:100%;
-    height:280px;
-    border:1px solid #ff174455;
-    border-radius:16px;
-    background:#000;
-    box-shadow:0 0 30px #ff174422;
+    height:100%;
+    border:0;
+    border-radius:50%;
 }
 
 @keyframes pulse{
     50%{
         transform:scale(1.08);
-        opacity:.7
+        opacity:.65;
     }
 }
 
 @keyframes listen{
     50%{
-        box-shadow:0 0 70px #ff1744
+        box-shadow:
+            0 0 0 18px #ff174422,
+            0 0 75px #ff1744;
+    }
+}
+
+@keyframes show{
+    from{
+        opacity:0;
+        transform:scale(.7);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
     }
 }
 
 @media(max-width:900px){
+
+    body{
+        overflow:auto;
+    }
+
     .main{
         flex-direction:column;
-        gap:20px;
+        gap:25px;
+    }
+
+    .main.video-visible .voice{
+        transform:none;
+    }
+
+    .voice{
+        width:300px;
+        height:300px;
+    }
+
+    .r1{
+        width:280px;
+        height:280px;
+    }
+
+    .r2{
+        width:235px;
+        height:235px;
+    }
+
+    .r3{
+        width:190px;
+        height:190px;
     }
 
     .player{
-        width:90vw;
-    }
-
-    .player iframe{
-        height:230px;
+        width:280px;
+        height:280px;
     }
 }
 </style>
@@ -181,31 +270,36 @@ body{
 
         <button id="mic" aria-label="Start voice search">
 
-            <svg class="mic-icon"
-                 viewBox="0 0 24 24"
-                 fill="none">
+            <svg
+                class="mic-icon"
+                viewBox="0 0 24 24"
+                fill="none">
 
-                <rect x="8" y="2"
-                      width="8"
-                      height="13"
-                      rx="4"
-                      fill="white"/>
+                <rect
+                    x="8"
+                    y="2"
+                    width="8"
+                    height="13"
+                    rx="4"
+                    fill="white"/>
 
-                <path d="M5 11C5 15 8 18 12 18C16 18 19 15 19 11"
-                      stroke="white"
-                      stroke-width="2"
-                      stroke-linecap="round"/>
+                <path
+                    d="M5 11C5 15 8 18 12 18C16 18 19 15 19 11"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
 
-                <path d="M12 18V22"
-                      stroke="white"
-                      stroke-width="2"
-                      stroke-linecap="round"/>
+                <path
+                    d="M12 18V22"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
 
-                <path d="M9 22H15"
-                      stroke="white"
-                      stroke-width="2"
-                      stroke-linecap="round"/>
-
+                <path
+                    d="M9 22H15"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
             </svg>
 
         </button>
@@ -216,7 +310,7 @@ body{
 
         <iframe
             id="youtubePlayer"
-            allow="autoplay; encrypted-media"
+            allow="autoplay; encrypted-media; picture-in-picture"
             allowfullscreen>
         </iframe>
 
@@ -225,80 +319,135 @@ body{
 </div>
 
 <script>
+
 const mic=document.getElementById("mic");
 const voice=document.getElementById("voice");
+const main=document.getElementById("main");
 const player=document.getElementById("player");
 const youtubePlayer=document.getElementById("youtubePlayer");
 
 const SpeechRecognition=
-    window.SpeechRecognition||
+    window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
 if(!SpeechRecognition){
+
     mic.disabled=true;
-    console.error("Speech recognition not supported");
+
+    console.error(
+        "Speech recognition is not supported"
+    );
+
 }else{
 
-    const recognition=new SpeechRecognition();
+    const recognition=
+        new SpeechRecognition();
 
     recognition.lang="en-US";
     recognition.continuous=false;
     recognition.interimResults=false;
 
     mic.onclick=()=>{
+
         try{
+
             recognition.start();
-            voice.classList.add("listening");
+
+            mic.classList.add("listening");
+
         }catch(error){
+
             console.error(error);
+
         }
     };
 
     recognition.onresult=async event=>{
 
         const command=
-            event.results[0][0].transcript.trim();
+            event.results[0][0]
+            .transcript
+            .trim();
+
+        console.log(
+            "Recognized:",
+            command
+        );
 
         try{
 
-            const response=await fetch("/youtube/play",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    command:command
-                })
-            });
+            const response=
+                await fetch(
+                    "/youtube/play",
+                    {
+                        method:"POST",
 
-            const data=await response.json();
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
 
-            if(!response.ok||!data.success){
-                console.error(
-                    data.message||"Song not found"
+                        body:
+                            JSON.stringify({
+                                command:command
+                            })
+                    }
                 );
+
+            const data=
+                await response.json();
+
+            if(
+                !response.ok ||
+                !data.success
+            ){
+
+                console.error(
+                    data.message ||
+                    "Song not found"
+                );
+
                 return;
             }
 
             youtubePlayer.src=data.url;
+
             player.style.display="block";
 
-            voice.style.transform="translateX(-250px)";
+            main.classList.add(
+                "video-visible"
+            );
 
         }catch(error){
-            console.error("Backend error:",error);
+
+            console.error(
+                "Backend error:",
+                error
+            );
+
         }
     };
 
     recognition.onerror=event=>{
-        console.error("Mic error:",event.error);
-        voice.classList.remove("listening");
+
+        console.error(
+            "Mic error:",
+            event.error
+        );
+
+        mic.classList.remove(
+            "listening"
+        );
     };
 
     recognition.onend=()=>{
-        voice.classList.remove("listening");
+
+        mic.classList.remove(
+            "listening"
+        );
     };
 }
+
 </script>
 
 </body>
