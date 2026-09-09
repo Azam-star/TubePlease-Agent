@@ -1,378 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nova AI</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
+    margin: 0;
     min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background:
-        radial-gradient(circle at 50% 50%, rgba(255, 0, 45, 0.20), transparent 25%),
-        radial-gradient(circle at 20% 50%, rgba(255, 0, 40, 0.10), transparent 30%),
-        radial-gradient(circle at 80% 50%, rgba(180, 0, 50, 0.10), transparent 30%),
-        #050507;
-    font-family: "Segoe UI", Arial, sans-serif;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+    color: #e0e0ff;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* Subtle background grid */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
-    pointer-events: none;
+.card {
+    width: 340px;
+    padding: 40px;
+    text-align: center;
+    background: rgba(25, 25, 40, 0.85);
+    border: 1px solid #444;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 25px rgba(0, 200, 255, 0.3);
+    transition: transform 0.3s ease;
 }
 
-/* YouTube logo */
-.youtube-logo {
-    position: fixed;
-    top: 28px;
-    left: 35px;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    color: white;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -1px;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.youtube-icon {
-    width: 40px;
-    height: 28px;
-    border-radius: 8px;
-    background: #ff0033;
-    position: relative;
-    box-shadow: 0 0 20px rgba(255,0,51,.25);
+h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #00f0ff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.youtube-icon::after {
-    content: "";
-    position: absolute;
-    left: 15px;
-    top: 7px;
-
-    border-left: 11px solid white;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-}
-
-/* Main microphone area */
-.voice-area {
-    position: relative;
-
-    width: 380px;
-    height: 380px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Outer rings */
-.ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 30, 75, .35);
-}
-
-.ring-1 {
-    width: 360px;
-    height: 360px;
-    animation: rotate 12s linear infinite;
-}
-
-.ring-2 {
-    width: 310px;
-    height: 310px;
-    border-color: rgba(255, 70, 100, .4);
-    animation: rotateReverse 9s linear infinite;
-}
-
-.ring-3 {
-    width: 260px;
-    height: 260px;
-    border-color: rgba(255, 0, 50, .55);
-    animation: pulseRing 2.2s ease-in-out infinite;
-}
-
-/* Glowing microphone */
-.mic-container {
-    width: 190px;
-    height: 190px;
-
-    position: relative;
-    z-index: 3;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ff9aaa,
-            #ff3156 35%,
-            #d00035 65%,
-            #650018
-        );
-
-    box-shadow:
-        0 0 45px rgba(255, 0, 55, .65),
-        0 0 100px rgba(255, 0, 55, .30),
-        inset 0 0 35px rgba(255,255,255,.14);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition: transform .25s ease;
+p {
+    font-size: 14px;
+    color: #bbb;
 }
 
 .mic {
-    width: 100%;
-    height: 100%;
-
+    width: 100px;
+    height: 100px;
     border: none;
     border-radius: 50%;
-
-    background: transparent;
-
-    color: white;
-    font-size: 65px;
-
+    font-size: 40px;
     cursor: pointer;
-
-    outline: none;
+    background: linear-gradient(135deg, #00f0ff, #ff00ff);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.mic-container:hover {
-    transform: scale(1.05);
+.mic:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.7);
 }
 
-/* Audio waveform */
-.waveform {
-    position: absolute;
-    bottom: 38px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    z-index: 4;
+.mic:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.waveform span {
-    width: 3px;
-    height: 20px;
-
-    border-radius: 4px;
-
-    background: #ff496d;
-
-    animation: wave 1s ease-in-out infinite;
+.status {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #88f;
+    letter-spacing: 1px;
 }
 
-.waveform span:nth-child(1) { animation-delay: .1s; }
-.waveform span:nth-child(2) { animation-delay: .2s; }
-.waveform span:nth-child(3) { animation-delay: .3s; }
-.waveform span:nth-child(4) { animation-delay: .4s; }
-.waveform span:nth-child(5) { animation-delay: .5s; }
-.waveform span:nth-child(6) { animation-delay: .4s; }
-.waveform span:nth-child(7) { animation-delay: .3s; }
-.waveform span:nth-child(8) { animation-delay: .2s; }
-.waveform span:nth-child(9) { animation-delay: .1s; }
-
-/* Listening */
-.listening .mic-container {
-    animation: listeningGlow 1.1s infinite;
+.song {
+    margin-top: 15px;
+    min-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    background: linear-gradient(90deg, #00f0ff, #ff00ff);
+    padding: 8px 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-@keyframes listeningGlow {
+.listening {
+    animation: pulse 1.2s infinite;
+}
 
-    0%, 100% {
-        transform: scale(1);
-        box-shadow:
-            0 0 40px rgba(255, 0, 55, .55),
-            0 0 90px rgba(255, 0, 55, .25);
+.player {
+    margin-top: 25px;
+    width: 100%;
+    display: none;
+}
+
+.player iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+    border-radius: 12px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
     }
 
     50% {
-        transform: scale(1.08);
-        box-shadow:
-            0 0 65px rgba(255, 0, 55, .9),
-            0 0 130px rgba(255, 0, 55, .4);
-    }
-}
-
-@keyframes pulseRing {
-
-    0%, 100% {
-        transform: scale(1);
-        opacity: .5;
+        box-shadow: 0 0 35px rgba(255, 0, 255, 0.8);
     }
 
-    50% {
-        transform: scale(1.08);
-        opacity: 1;
-    }
-}
-
-@keyframes rotate {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes rotateReverse {
-    to {
-        transform: rotate(-360deg);
-    }
-}
-
-@keyframes wave {
-
-    0%, 100% {
-        transform: scaleY(.5);
-    }
-
-    50% {
-        transform: scaleY(1.8);
-    }
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-
-    .youtube-logo {
-        top: 20px;
-        left: 20px;
-        font-size: 20px;
-    }
-
-    .youtube-icon {
-        width: 34px;
-        height: 24px;
-    }
-
-    .voice-area {
-        width: 300px;
-        height: 300px;
-    }
-
-    .ring-1 {
-        width: 290px;
-        height: 290px;
-    }
-
-    .ring-2 {
-        width: 245px;
-        height: 245px;
-    }
-
-    .ring-3 {
-        width: 205px;
-        height: 205px;
-    }
-
-    .mic-container {
-        width: 155px;
-        height: 155px;
-    }
-
-    .mic {
-        font-size: 52px;
+    100% {
+        box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
     }
 }
 </style>
 </head>
 
-
 <body>
 
-<!-- YouTube Logo -->
-<div class="youtube-logo">
-    <div class="youtube-icon"></div>
-    <span>YouTube</span>
-</div>
+<div class="card">
 
+    <h2>Nova AI</h2>
 
-<!-- Microphone -->
-<div id="voiceArea" class="voice-area">
+    <p>Say a song name</p>
 
-    <div class="ring ring-1"></div>
-    <div class="ring ring-2"></div>
-    <div class="ring ring-3"></div>
+    <button id="mic" class="mic">🎙️</button>
 
-    <div class="mic-container">
-        <button id="mic" class="mic">🎙️</button>
+    <div id="status" class="status">
+        Tap microphone
     </div>
 
-    <div class="waveform">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+    <div id="song" class="song"></div>
+
+    <div id="player" class="player">
+        <iframe
+            id="youtubePlayer"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
     </div>
 
 </div>
 
 
-<!-- Keep your JavaScript here -->
 <script>
 
 const mic = document.getElementById("mic");
-const voiceArea = document.getElementById("voiceArea");
+const status = document.getElementById("status");
+const song = document.getElementById("song");
 
+const player = document.getElementById("player");
+const youtubePlayer = document.getElementById("youtubePlayer");
+
+
+// Check browser speech recognition support
 const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
 if (!SpeechRecognition) {
 
-    console.error("Speech recognition is not supported.");
+    status.textContent =
+        "Speech recognition is not supported";
+
+    mic.disabled = true;
 
 } else {
 
     const recognition = new SpeechRecognition();
 
     recognition.lang = "en-US";
+
     recognition.continuous = false;
+
     recognition.interimResults = false;
 
 
+    // MICROPHONE BUTTON
     mic.addEventListener("click", () => {
 
         try {
 
             recognition.start();
 
-            voiceArea.classList.add("listening");
+            mic.classList.add("listening");
 
-            console.log("Listening...");
+            status.textContent = "Listening...";
+
+            song.textContent = "";
 
         } catch (error) {
 
@@ -383,12 +204,19 @@ if (!SpeechRecognition) {
     });
 
 
+    // SPEECH RESULT
     recognition.onresult = async (event) => {
 
         const command =
             event.results[0][0].transcript.trim();
 
-        console.log("Command:", command);
+
+        console.log("Recognized:", command);
+
+
+        status.textContent = "Searching...";
+
+        song.textContent = command;
 
 
         try {
@@ -399,7 +227,8 @@ if (!SpeechRecognition) {
                     method: "POST",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type":
+                            "application/json"
                     },
 
                     body: JSON.stringify({
@@ -411,61 +240,83 @@ if (!SpeechRecognition) {
 
             const data = await response.json();
 
-            console.log("Server:", data);
+
+            console.log("Backend:", data);
 
 
             if (!response.ok || !data.success) {
 
-                console.error(
-                    data.message || "Song not found"
-                );
+                status.textContent =
+                    data.message ||
+                    "Song not found";
 
                 return;
             }
 
 
-            /*
-              Convert the backend embed URL
-              into a normal YouTube URL.
-            */
-
-            let youtubeUrl = data.url.replace(
-                "https://www.youtube.com/embed/",
-                "https://www.youtube.com/watch?v="
-            );
+            // SONG FOUND
+            status.textContent =
+                "Playing: " + data.query;
 
 
-            /* Open YouTube */
-            window.open(
-                youtubeUrl,
-                "_blank"
-            );
+            song.textContent =
+                data.query;
+
+
+            // LOAD YOUTUBE
+            youtubePlayer.src = data.url;
+
+            player.style.display = "block";
+
 
         } catch (error) {
 
             console.error(
-                "Connection error:",
+                "Backend error:",
                 error
             );
 
+            status.textContent =
+                "Could not connect to server";
         }
-
     };
 
 
+    // SPEECH ERROR
     recognition.onerror = (event) => {
 
         console.error(
-            "Microphone error:",
+            "Speech error:",
             event.error
         );
 
+
+        if (event.error === "not-allowed") {
+
+            status.textContent =
+                "Microphone permission denied";
+
+        } else if (event.error === "no-speech") {
+
+            status.textContent =
+                "Didn't hear anything";
+
+        } else {
+
+            status.textContent =
+                "Microphone error: " +
+                event.error;
+        }
+
+
+        mic.classList.remove("listening");
     };
 
 
+    // SPEECH ENDED
     recognition.onend = () => {
 
-        voiceArea.classList.remove("listening");
+        mic.classList.remove("listening");
 
     };
 
