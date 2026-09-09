@@ -124,7 +124,7 @@ Miuh AI was created to demonstrate how **voice interaction, AI-style interfaces,
 
 ## 👨‍💻 Author
 
-**Mohammed Azam**
+**Shaik Abdullah Azam**
 
 GitHub:
 [https://github.com/Azam-star](https://github.com/Azam-star)
