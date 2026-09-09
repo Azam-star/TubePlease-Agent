@@ -2,604 +2,238 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Miuh AI</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            width: 100%;
-            min-height: 100%;
-        }
-
-        body {
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            overflow: hidden;
-
-            font-family: "Segoe UI", Arial, sans-serif;
-            color: white;
-
-            /* BLACK + RED CINEMATIC BACKGROUND */
-            background:
-                radial-gradient(
-                    circle at 50% 45%,
-                    rgba(255, 0, 45, 0.30) 0%,
-                    rgba(180, 0, 35, 0.15) 18%,
-                    transparent 42%
-                ),
-                radial-gradient(
-                    circle at 15% 20%,
-                    rgba(255, 0, 35, 0.18),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 85% 75%,
-                    rgba(150, 0, 35, 0.16),
-                    transparent 30%
-                ),
-                linear-gradient(
-                    135deg,
-                    #020203 0%,
-                    #090306 45%,
-                    #020203 100%
-                );
-        }
-
-        /* Large red ambient glow */
-        body::before {
-            content: "";
-            position: fixed;
-            width: 650px;
-            height: 650px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-
-            border-radius: 50%;
-
-            background: rgba(255, 0, 40, 0.08);
-
-            filter: blur(100px);
-
-            pointer-events: none;
-            z-index: -2;
-        }
-
-        /* Subtle cinematic grid */
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-
-            background-image:
-                linear-gradient(
-                    rgba(255, 255, 255, 0.018) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255, 255, 255, 0.018) 1px,
-                    transparent 1px
-                );
-
-            background-size: 60px 60px;
-
-            mask-image: linear-gradient(
-                to bottom,
-                transparent,
-                black 25%,
-                black 75%,
-                transparent
-            );
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* MAIN CARD */
-        .card {
-            position: relative;
-
-            width: 380px;
-            padding: 48px 40px;
-
-            text-align: center;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(25, 10, 15, 0.90),
-                    rgba(10, 8, 12, 0.88)
-                );
-
-            border: 1px solid rgba(255, 60, 90, 0.22);
-
-            border-radius: 26px;
-
-            backdrop-filter: blur(20px);
-
-            box-shadow:
-                0 0 25px rgba(255, 0, 45, 0.12),
-                0 0 80px rgba(255, 0, 45, 0.08),
-                0 25px 70px rgba(0, 0, 0, 0.65);
-
-            transition: transform 0.3s ease,
-                        box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-
-            box-shadow:
-                0 0 35px rgba(255, 0, 45, 0.22),
-                0 0 100px rgba(255, 0, 45, 0.12),
-                0 30px 80px rgba(0, 0, 0, 0.7);
-        }
-
-        /* MIUH AI */
-        h2 {
-            margin: 0 0 12px;
-
-            font-size: 44px;
-            font-weight: 700;
-            letter-spacing: -2px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff 0%,
-                    #ff6b82 40%,
-                    #ff1744 70%,
-                    #ff0033 100%
-                );
-
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            text-shadow:
-                0 0 25px rgba(255, 0, 45, 0.18);
-        }
-
-        p {
-            margin: 0;
-
-            font-size: 14px;
-            color: #a7a7ad;
-        }
-
-        /* MICROPHONE */
-        .mic {
-            width: 125px;
-            height: 125px;
-
-            margin-top: 30px;
-
-            border: none;
-            border-radius: 50%;
-
-            font-size: 48px;
-
-            cursor: pointer;
-
-            background:
-                radial-gradient(
-                    circle at 35% 25%,
-                    #ff8297,
-                    #ff3156 35%,
-                    #e60036 62%,
-                    #760018 100%
-                );
-
-            color: white;
-
-            box-shadow:
-                0 0 0 8px rgba(255, 0, 45, 0.06),
-                0 0 30px rgba(255, 0, 45, 0.45),
-                0 0 75px rgba(255, 0, 45, 0.20),
-                inset 0 0 25px rgba(255, 255, 255, 0.10);
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.3s ease;
-        }
-
-        .mic:hover {
-            transform: scale(1.08);
-
-            box-shadow:
-                0 0 0 12px rgba(255, 0, 45, 0.06),
-                0 0 45px rgba(255, 0, 45, 0.70),
-                0 0 100px rgba(255, 0, 45, 0.25),
-                inset 0 0 25px rgba(255, 255, 255, 0.12);
-        }
-
-        .mic:active {
-            transform: scale(0.96);
-        }
-
-        .mic:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* STATUS */
-        .status {
-            margin-top: 22px;
-
-            font-size: 14px;
-            color: #d7d7dc;
-
-            letter-spacing: 0.5px;
-        }
-
-        /* SONG RESULT */
-        .song {
-            margin-top: 15px;
-
-            min-height: 40px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 9px 14px;
-
-            font-size: 13px;
-            color: white;
-
-            background:
-                rgba(255, 255, 255, 0.04);
-
-            border:
-                1px solid rgba(255, 60, 90, 0.16);
-
-            border-radius: 14px;
-
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        /* YOUTUBE PLAYER */
-        .player {
-            margin-top: 25px;
-            width: 100%;
-            display: none;
-        }
-
-        .player iframe {
-            width: 100%;
-            height: 210px;
-
-            border: none;
-            border-radius: 14px;
-        }
-
-        /* LISTENING */
-        .listening {
-            animation: listeningPulse 1.15s infinite;
-        }
-
-        @keyframes listeningPulse {
-            0% {
-                box-shadow:
-                    0 0 0 8px rgba(255, 0, 45, 0.06),
-                    0 0 30px rgba(255, 0, 45, 0.45);
-            }
-
-            50% {
-                box-shadow:
-                    0 0 0 18px rgba(255, 0, 45, 0.03),
-                    0 0 65px rgba(255, 0, 45, 0.85),
-                    0 0 110px rgba(255, 0, 45, 0.25);
-            }
-
-            100% {
-                box-shadow:
-                    0 0 0 8px rgba(255, 0, 45, 0.06),
-                    0 0 30px rgba(255, 0, 45, 0.45);
-            }
-        }
-
-        /* RED LIGHT BEAM */
-        .red-light {
-            position: fixed;
-
-            width: 900px;
-            height: 180px;
-
-            left: 50%;
-            bottom: -120px;
-
-            transform: translateX(-50%);
-
-            background:
-                radial-gradient(
-                    ellipse,
-                    rgba(255, 0, 45, 0.18),
-                    transparent 70%
-                );
-
-            filter: blur(35px);
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            .card {
-                width: calc(100% - 35px);
-                padding: 40px 25px;
-            }
-
-            h2 {
-                font-size: 38px;
-            }
-
-            .mic {
-                width: 110px;
-                height: 110px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nova AI</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:grid;
+    place-items:center;
+    background:#09090b;
+    color:white;
+    font-family:Arial;
+}
+
+.card{
+    width:300px;
+    padding:35px;
+    text-align:center;
+    background:#151518;
+    border:1px solid #333;
+    border-radius:25px;
+}
+
+.mic{
+    width:90px;
+    height:90px;
+    border:0;
+    border-radius:50%;
+    font-size:35px;
+    cursor:pointer;
+}
+
+.status{
+    margin-top:20px;
+    color:#aaa;
+}
+
+.song{
+    margin-top:10px;
+    font-size:13px;
+}
+
+.listening{
+    transform:scale(1.1);
+    box-shadow:0 0 0 10px #ffffff18;
+}
+</style>
 </head>
-
 
 <body>
 
-    <div class="red-light"></div>
+<div class="card">
 
-    <div class="card">
+    <h2>Nova AI</h2>
 
-        <h2>Miuh AI</h2>
+    <p>Say a song name</p>
 
-        <p>Say a song name</p>
+    <button id="mic" class="mic">
+        🎙️
+    </button>
 
-        <button id="mic" class="mic">
-            🎙️
-        </button>
-
-        <div id="status" class="status">
-            Tap microphone
-        </div>
-
-        <div id="song" class="song"></div>
-
-        <div id="player" class="player">
-            <iframe
-                id="youtubePlayer"
-                allow="autoplay; encrypted-media"
-                allowfullscreen>
-            </iframe>
-        </div>
-
+    <div id="status" class="status">
+        Tap microphone
     </div>
 
+    <div id="song" class="song"></div>
 
-    <script>
+</div>
 
-        const mic = document.getElementById("mic");
-        const status = document.getElementById("status");
-        const song = document.getElementById("song");
+<script>
 
-        const player = document.getElementById("player");
-        const youtubePlayer =
-            document.getElementById("youtubePlayer");
+const mic=document.getElementById("mic");
+const status=document.getElementById("status");
+const song=document.getElementById("song");
 
+const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-        const SpeechRecognition =
-            window.SpeechRecognition ||
-            window.webkitSpeechRecognition;
+let youtubeTab=null;
+let listening=false;
 
+if(!SpeechRecognition){
 
-        if (!SpeechRecognition) {
+    status.textContent=
+        "Speech recognition unavailable";
 
-            status.textContent =
-                "Speech recognition is not supported";
+    mic.disabled=true;
 
-            mic.disabled = true;
+}else{
 
-        } else {
+    const recognition=
+        new SpeechRecognition();
 
-            const recognition =
-                new SpeechRecognition();
+    recognition.lang="en-US";
+    recognition.continuous=false;
+    recognition.interimResults=false;
 
-            recognition.lang = "en-US";
+    recognition.onstart=()=>{
 
-            recognition.continuous = false;
+        listening=true;
 
-            recognition.interimResults = false;
+        mic.classList.add("listening");
 
+        status.textContent=
+            "Listening...";
 
-            mic.addEventListener("click", () => {
+    };
 
-                try {
+    recognition.onend=()=>{
 
-                    recognition.start();
+        listening=false;
 
-                    mic.classList.add("listening");
+        mic.classList.remove("listening");
 
-                    status.textContent =
-                        "Listening...";
+    };
 
-                    song.textContent = "";
+    recognition.onerror=()=>{
 
-                } catch (error) {
+        listening=false;
 
-                    console.error(error);
+        mic.classList.remove("listening");
 
-                }
+        status.textContent="Try again";
 
-            });
+    };
 
+    recognition.onresult=async(event)=>{
 
-            recognition.onresult = async (event) => {
+        const command=
+            event.results[0][0]
+            .transcript
+            .trim();
 
-                const command =
-                    event.results[0][0]
-                        .transcript
-                        .trim();
+        if(!command){
 
+            status.textContent=
+                "No song detected";
 
-                console.log(
-                    "Recognized:",
-                    command
-                );
-
-
-                status.textContent =
-                    "Searching...";
-
-                song.textContent =
-                    command;
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            "/youtube/play",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify({
-                                        command:
-                                            command
-                                    })
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    console.log(
-                        "Backend:",
-                        data
-                    );
-
-
-                    if (
-                        !response.ok ||
-                        !data.success
-                    ) {
-
-                        status.textContent =
-                            data.message ||
-                            "Song not found";
-
-                        return;
-                    }
-
-
-                    status.textContent =
-                        "Opening YouTube...";
-
-                    song.textContent =
-                        data.query;
-
-
-                    /*
-                     * Convert YouTube embed URL
-                     * into normal YouTube URL.
-                     */
-
-                    const youtubeUrl =
-                        data.url.replace(
-                            "https://www.youtube.com/embed/",
-                            "https://www.youtube.com/watch?v="
-                        );
-
-
-                    /*
-                     * Open YouTube directly.
-                     */
-
-                    window.open(
-                        youtubeUrl,
-                        "_blank"
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "Backend error:",
-                        error
-                    );
-
-                    status.textContent =
-                        "Could not connect to server";
-                }
-            };
-
-
-            recognition.onerror = (event) => {
-
-                console.error(
-                    "Speech error:",
-                    event.error
-                );
-
-
-                if (
-                    event.error ===
-                    "not-allowed"
-                ) {
-
-                    status.textContent =
-                        "Microphone permission denied";
-
-                } else if (
-                    event.error ===
-                    "no-speech"
-                ) {
-
-                    status.textContent =
-                        "Didn't hear anything";
-
-                } else {
-
-                    status.textContent =
-                        "Microphone error: " +
-                        event.error;
-                }
-
-
-                mic.classList.remove(
-                    "listening"
-                );
-            };
-
-
-            recognition.onend = () => {
-
-                mic.classList.remove(
-                    "listening"
-                );
-
-            };
+            return;
 
         }
 
-    </script>
+        song.textContent=command;
+
+        status.textContent=
+            "Finding song...";
+
+        try{
+
+            const response=
+                await fetch(
+                    "/youtube/play",
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:JSON.stringify({
+                            command:command
+                        })
+                    }
+                );
+
+            const data=
+                await response.json();
+
+            if(!data.success){
+
+                status.textContent=
+                    data.message ||
+                    "Song not found";
+
+                return;
+
+            }
+
+            if(!youtubeTab ||
+               youtubeTab.closed){
+
+                youtubeTab=
+                    window.open(
+                        data.url,
+                        "NovaYouTube"
+                    );
+
+            }else{
+
+                youtubeTab.location.href=
+                    data.url;
+
+                youtubeTab.focus();
+
+            }
+
+            status.textContent="Playing";
+
+        }catch(error){
+
+            console.error(error);
+
+            status.textContent=
+                "Server connection failed";
+
+        }
+
+    };
+
+    mic.onclick=()=>{
+
+        if(listening)
+            return;
+
+        try{
+
+            recognition.start();
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    };
+
+}
+
+</script>
 
 </body>
-
 </html>
