@@ -108,7 +108,7 @@ http://127.0.0.1:5000
 Click the microphone and say:
 
 ```text
-"Believer"
+"99 Names Of Allah"
 ```
 
 Miuh AI processes your voice, searches YouTube, and loads the matching video in the application.
