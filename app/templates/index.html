@@ -8,7 +8,13 @@
     <title>Miuh AI</title>
 
     <style>
+        /* =========================================================
+           RESET
+        ========================================================== */
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
@@ -16,72 +22,89 @@
         body {
             width: 100%;
             height: 100%;
-            margin: 0;
         }
+
+
+        /* =========================================================
+           BODY / BACKGROUND
+        ========================================================== */
 
         body {
             min-height: 100vh;
             overflow: hidden;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
 
-            font-family: "Segoe UI", Arial, sans-serif;
+            color: white;
 
             background:
                 radial-gradient(
                     circle at 50% 48%,
                     rgba(255, 0, 45, 0.22) 0%,
-                    rgba(130, 0, 30, 0.10) 24%,
+                    rgba(130, 0, 30, 0.11) 24%,
                     transparent 48%
                 ),
+
                 radial-gradient(
                     circle at 12% 50%,
-                    rgba(180, 0, 35, 0.12),
+                    rgba(180, 0, 35, 0.13),
                     transparent 32%
                 ),
+
                 radial-gradient(
                     circle at 88% 50%,
-                    rgba(180, 0, 35, 0.12),
+                    rgba(180, 0, 35, 0.13),
                     transparent 32%
                 ),
+
                 linear-gradient(
                     135deg,
                     #010102 0%,
-                    #090205 48%,
+                    #0a0206 48%,
                     #020203 100%
                 );
-
-            color: white;
         }
 
-        /* =========================
-           BACKGROUND
-        ========================== */
+
+        /* =========================================================
+           BACKGROUND GLOW
+        ========================================================== */
 
         .background-glow {
             position: fixed;
+
             left: 50%;
             top: 50%;
 
-            width: 650px;
-            height: 650px;
+            width: 700px;
+            height: 700px;
 
-            transform: translate(-50%, -50%);
+            transform:
+                translate(-50%, -50%);
 
             border-radius: 50%;
 
-            background: rgba(255, 0, 45, 0.08);
+            background:
+                rgba(255, 0, 45, 0.08);
 
             filter: blur(110px);
 
             pointer-events: none;
+
             z-index: 0;
         }
 
+
+        /* =========================================================
+           BACKGROUND GRID
+        ========================================================== */
+
         .grid {
             position: fixed;
+
             inset: 0;
 
             background-image:
@@ -97,40 +120,46 @@
 
             background-size: 60px 60px;
 
-            mask-image: linear-gradient(
-                to bottom,
-                transparent,
-                black 20%,
-                black 80%,
-                transparent
-            );
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    black 20%,
+                    black 80%,
+                    transparent
+                );
 
             pointer-events: none;
+
             z-index: 0;
         }
 
-        /* =========================
+
+        /* =========================================================
            YOUTUBE LOGO
-        ========================== */
+        ========================================================== */
 
         .youtube-logo {
             position: fixed;
 
-            top: 28px;
             left: 32px;
+            top: 28px;
 
             display: flex;
             align-items: center;
+
             gap: 10px;
 
             color: white;
 
             font-size: 23px;
             font-weight: 700;
+
             letter-spacing: -0.5px;
 
-            z-index: 10;
+            z-index: 30;
         }
+
 
         .youtube-icon {
             position: relative;
@@ -143,8 +172,10 @@
             background: #ff0033;
 
             box-shadow:
-                0 0 18px rgba(255, 0, 45, 0.30);
+                0 0 20px
+                rgba(255, 0, 45, 0.30);
         }
+
 
         .youtube-icon::after {
             content: "";
@@ -154,42 +185,53 @@
             left: 15px;
             top: 7px;
 
-            border-left: 11px solid white;
-            border-top: 7px solid transparent;
-            border-bottom: 7px solid transparent;
+            border-left:
+                11px solid white;
+
+            border-top:
+                7px solid transparent;
+
+            border-bottom:
+                7px solid transparent;
         }
 
-        /* =========================
-           MIUH AI
-        ========================== */
+
+        /* =========================================================
+           MIUH AI LOGO
+        ========================================================== */
 
         .brand {
             position: fixed;
 
-            top: 30px;
             left: 50%;
+            top: 29px;
 
-            transform: translateX(-50%);
-
-            z-index: 10;
+            transform:
+                translateX(-50%);
 
             font-size: 22px;
             font-weight: 700;
+
             letter-spacing: 0.5px;
 
             color: white;
 
             text-shadow:
-                0 0 16px rgba(255, 0, 45, 0.25);
+                0 0 18px
+                rgba(255, 0, 45, 0.25);
+
+            z-index: 30;
         }
+
 
         .brand span {
             color: #ff1744;
         }
 
-        /* =========================
+
+        /* =========================================================
            MAIN AREA
-        ========================== */
+        ========================================================== */
 
         .main {
             position: relative;
@@ -198,79 +240,113 @@
             height: 100vh;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
-            z-index: 2;
+            z-index: 5;
         }
 
-        /* =========================
-           MICROPHONE
-        ========================== */
+
+        /* =========================================================
+           VOICE AREA
+        ========================================================== */
 
         .voice-area {
             position: relative;
 
-            width: 350px;
-            height: 350px;
+            width: 370px;
+            height: 370px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
+
+            transition:
+                transform 0.5s ease;
         }
 
-        /* Outer rings */
+
+        /*
+           When video is visible, move
+           microphone slightly left.
+        */
+
+        .main.video-visible .voice-area {
+            transform:
+                translateX(-250px);
+        }
+
+
+        /* =========================================================
+           OUTER RINGS
+        ========================================================== */
 
         .ring {
             position: absolute;
 
             border-radius: 50%;
 
-            border: 1px solid
-                rgba(255, 30, 75, 0.30);
+            border:
+                1px solid
+                rgba(255, 30, 75, 0.32);
 
             pointer-events: none;
         }
 
+
         .ring-1 {
-            width: 340px;
-            height: 340px;
+            width: 350px;
+            height: 350px;
 
             animation:
                 rotate 12s linear infinite;
         }
 
+
         .ring-2 {
-            width: 290px;
-            height: 290px;
+            width: 300px;
+            height: 300px;
 
             border-color:
-                rgba(255, 50, 90, 0.34);
+                rgba(255, 45, 85, 0.38);
 
             animation:
-                rotate-reverse 9s linear infinite;
+                rotate-reverse
+                9s
+                linear
+                infinite;
         }
+
 
         .ring-3 {
-            width: 240px;
-            height: 240px;
+            width: 250px;
+            height: 250px;
 
             border-color:
-                rgba(255, 0, 45, 0.45);
+                rgba(255, 0, 45, 0.52);
 
             animation:
-                pulse-ring 2.2s ease-in-out infinite;
+                pulse-ring
+                2.2s
+                ease-in-out
+                infinite;
         }
 
-        /* Microphone button */
+
+        /* =========================================================
+           MICROPHONE
+        ========================================================== */
 
         .mic {
             position: relative;
 
-            width: 135px;
-            height: 135px;
+            width: 140px;
+            height: 140px;
 
             border: none;
+
             border-radius: 50%;
 
             display: flex;
@@ -279,73 +355,79 @@
 
             background:
                 radial-gradient(
-                    circle at 35% 25%,
-                    #ff8da0 0%,
-                    #ff365b 30%,
-                    #e40038 62%,
-                    #680017 100%
+                    circle at 35% 24%,
+                    #ff9aaa,
+                    #ff365b 35%,
+                    #e30038 65%,
+                    #690018 100%
                 );
 
             cursor: pointer;
 
-            z-index: 5;
+            z-index: 10;
 
             box-shadow:
                 0 0 0 8px
-                    rgba(255, 0, 45, 0.05),
+                rgba(255, 0, 45, 0.055),
 
-                0 0 35px
-                    rgba(255, 0, 45, 0.50),
+                0 0 40px
+                rgba(255, 0, 45, 0.55),
 
-                0 0 80px
-                    rgba(255, 0, 45, 0.22),
+                0 0 90px
+                rgba(255, 0, 45, 0.23),
 
-                inset 0 0 25px
-                    rgba(255, 255, 255, 0.10);
+                inset 0 0 28px
+                rgba(255, 255, 255, 0.12);
 
             transition:
                 transform 0.22s ease,
                 box-shadow 0.3s ease;
         }
 
+
         .mic:hover {
             transform: scale(1.07);
 
             box-shadow:
-                0 0 0 10px
-                    rgba(255, 0, 45, 0.06),
+                0 0 0 11px
+                rgba(255, 0, 45, 0.06),
 
-                0 0 50px
-                    rgba(255, 0, 45, 0.72),
+                0 0 55px
+                rgba(255, 0, 45, 0.75),
 
                 0 0 110px
-                    rgba(255, 0, 45, 0.28),
+                rgba(255, 0, 45, 0.28),
 
                 inset 0 0 30px
-                    rgba(255, 255, 255, 0.14);
+                rgba(255, 255, 255, 0.14);
         }
+
 
         .mic:active {
             transform: scale(0.95);
         }
+
 
         .mic:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
-        /* White microphone SVG */
+
+        /* =========================================================
+           WHITE MICROPHONE SVG
+        ========================================================== */
 
         .mic-icon {
-            width: 64px;
-            height: 64px;
+            width: 66px;
+            height: 66px;
 
             display: block;
 
             filter:
                 drop-shadow(
-                    0 0 7px
-                    rgba(255,255,255,0.35)
+                    0 0 8px
+                    rgba(255,255,255,0.42)
                 );
 
             transition:
@@ -353,51 +435,63 @@
                 filter 0.2s ease;
         }
 
+
         .mic:hover .mic-icon {
             transform: scale(1.08);
 
             filter:
                 drop-shadow(
-                    0 0 13px
-                    rgba(255,255,255,0.70)
+                    0 0 15px
+                    rgba(255,255,255,0.72)
                 );
         }
 
-        /* Listening */
+
+        /* =========================================================
+           LISTENING STATE
+        ========================================================== */
 
         .voice-area.listening .mic {
             animation:
-                listening-pulse 1.15s infinite;
+                listening-pulse
+                1.1s
+                infinite;
         }
+
 
         .voice-area.listening .ring-1,
         .voice-area.listening .ring-2,
         .voice-area.listening .ring-3 {
             border-color:
-                rgba(255, 50, 80, 0.72);
+                rgba(255, 50, 85, 0.72);
         }
 
-        /* =========================
+
+        /* =========================================================
            WAVEFORM
-        ========================== */
+        ========================================================== */
 
         .waveform {
             position: absolute;
 
-            bottom: 32px;
+            bottom: 35px;
+
             left: 50%;
 
-            transform: translateX(-50%);
+            transform:
+                translateX(-50%);
 
             display: flex;
+
             align-items: center;
 
             gap: 4px;
 
-            z-index: 4;
-
             pointer-events: none;
+
+            z-index: 11;
         }
+
 
         .waveform span {
             width: 3px;
@@ -413,8 +507,12 @@
                 );
 
             animation:
-                wave 1s ease-in-out infinite;
+                wave
+                1s
+                ease-in-out
+                infinite;
         }
+
 
         .waveform span:nth-child(1) {
             animation-delay: .1s;
@@ -452,88 +550,94 @@
             animation-delay: .1s;
         }
 
-        /* =========================
+
+        /* =========================================================
            VIDEO PLAYER
-        ========================== */
+        ========================================================== */
 
         .player {
             position: fixed;
 
-            left: 50%;
-            bottom: 30px;
+            left: calc(50% + 65px);
+            top: 50%;
 
-            transform: translateX(-50%);
+            transform:
+                translateY(-50%);
 
-            width: min(560px, calc(100vw - 40px));
+            width: 520px;
 
             display: none;
 
             z-index: 20;
+
+            animation:
+                videoIn
+                0.45s
+                ease
+                forwards;
         }
+
 
         .player iframe {
             display: block;
 
             width: 100%;
-            height: 315px;
+            height: 293px;
 
-            border: 1px solid
-                rgba(255, 40, 70, 0.30);
+            border:
+                1px solid
+                rgba(255, 40, 70, 0.38);
 
-            border-radius: 16px;
+            border-radius: 18px;
 
-            background: black;
+            background: #000;
 
             box-shadow:
                 0 0 35px
-                rgba(255, 0, 45, 0.15);
+                rgba(255, 0, 45, 0.18),
+
+                0 20px 60px
+                rgba(0, 0, 0, 0.60);
         }
 
-        /* =========================
-           HIDDEN TEXT ELEMENTS
-        ========================== */
 
-        #status,
-        #song {
-            display: none;
-        }
-
-        /* =========================
+        /* =========================================================
            ANIMATIONS
-        ========================== */
+        ========================================================== */
 
         @keyframes listening-pulse {
 
             0% {
                 box-shadow:
                     0 0 0 8px
-                        rgba(255, 0, 45, 0.05),
+                    rgba(255, 0, 45, 0.05),
 
                     0 0 35px
-                        rgba(255, 0, 45, 0.50);
+                    rgba(255, 0, 45, 0.50);
             }
 
             50% {
                 box-shadow:
                     0 0 0 20px
-                        rgba(255, 0, 45, 0.03),
+                    rgba(255, 0, 45, 0.03),
 
-                    0 0 65px
-                        rgba(255, 0, 45, 0.90),
+                    0 0 70px
+                    rgba(255, 0, 45, 0.90),
 
-                    0 0 110px
-                        rgba(255, 0, 45, 0.30);
+                    0 0 120px
+                    rgba(255, 0, 45, 0.30);
             }
 
             100% {
                 box-shadow:
                     0 0 0 8px
-                        rgba(255, 0, 45, 0.05),
+                    rgba(255, 0, 45, 0.05),
 
                     0 0 35px
-                        rgba(255, 0, 45, 0.50);
+                    rgba(255, 0, 45, 0.50);
             }
         }
+
 
         @keyframes pulse-ring {
 
@@ -549,6 +653,7 @@
             }
         }
 
+
         @keyframes rotate {
 
             from {
@@ -560,6 +665,7 @@
             }
         }
 
+
         @keyframes rotate-reverse {
 
             from {
@@ -570,6 +676,7 @@
                 transform: rotate(-360deg);
             }
         }
+
 
         @keyframes wave {
 
@@ -583,80 +690,182 @@
             }
         }
 
-        /* =========================
-           MOBILE
-        ========================== */
+
+        @keyframes videoIn {
+
+            from {
+                opacity: 0;
+                transform:
+                    translate(40px, -50%);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translate(0, -50%);
+            }
+        }
+
+
+        /* =========================================================
+           HIDDEN ELEMENTS
+        ========================================================== */
+
+        #status,
+        #song {
+            display: none;
+        }
+
+
+        /* =========================================================
+           MOBILE / TABLET
+        ========================================================== */
+
+        @media (max-width: 1100px) {
+
+            body {
+                overflow-y: auto;
+            }
+
+
+            .main {
+                min-height: 100vh;
+                height: auto;
+
+                padding:
+                    100px 20px
+                    350px;
+            }
+
+
+            .main.video-visible {
+                align-items: flex-start;
+            }
+
+
+            .main.video-visible .voice-area {
+                transform: none;
+            }
+
+
+            .player {
+                left: 50%;
+                top: auto;
+                bottom: 25px;
+
+                transform:
+                    translateX(-50%);
+
+                width:
+                    min(
+                        560px,
+                        calc(100vw - 40px)
+                    );
+            }
+
+
+            .player iframe {
+                height: 300px;
+            }
+        }
+
 
         @media (max-width: 600px) {
 
             .youtube-logo {
-                left: 20px;
                 top: 20px;
+                left: 20px;
 
-                font-size: 20px;
+                font-size: 19px;
             }
+
 
             .youtube-icon {
                 width: 34px;
                 height: 24px;
             }
 
+
             .brand {
                 top: 22px;
+
                 font-size: 18px;
             }
+
 
             .voice-area {
                 width: 300px;
                 height: 300px;
             }
 
+
             .ring-1 {
                 width: 290px;
                 height: 290px;
             }
+
 
             .ring-2 {
                 width: 245px;
                 height: 245px;
             }
 
+
             .ring-3 {
                 width: 205px;
                 height: 205px;
             }
+
 
             .mic {
                 width: 115px;
                 height: 115px;
             }
 
+
             .mic-icon {
                 width: 55px;
                 height: 55px;
             }
 
+
+            .waveform {
+                bottom: 29px;
+            }
+
+
             .player {
                 bottom: 15px;
+
+                width:
+                    calc(100vw - 30px);
             }
+
 
             .player iframe {
                 height: 210px;
             }
         }
+
     </style>
 </head>
 
 
 <body>
 
-    <!-- Background effects -->
+
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================== -->
 
     <div class="background-glow"></div>
+
     <div class="grid"></div>
 
 
-    <!-- YouTube logo -->
+    <!-- =========================================================
+         YOUTUBE LOGO
+    ========================================================== -->
 
     <div class="youtube-logo">
 
@@ -667,22 +876,34 @@
     </div>
 
 
-    <!-- Miuh AI -->
+    <!-- =========================================================
+         MIUH AI
+    ========================================================== -->
 
     <div class="brand">
-
         Miuh <span>AI</span>
-
     </div>
 
 
-    <!-- Main -->
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
 
-    <main class="main">
+    <main
+        id="main"
+        class="main">
+
+
+        <!-- =====================================================
+             MICROPHONE
+        ====================================================== -->
 
         <div
             id="voiceArea"
             class="voice-area">
+
+
+            <!-- Rings -->
 
             <div class="ring ring-1"></div>
 
@@ -691,12 +912,15 @@
             <div class="ring ring-3"></div>
 
 
-            <!-- White microphone -->
+            <!-- Microphone -->
 
             <button
                 id="mic"
                 class="mic"
-                aria-label="Start microphone">
+                aria-label="Start voice search">
+
+
+                <!-- WHITE MICROPHONE ICON -->
 
                 <svg
                     class="mic-icon"
@@ -704,7 +928,6 @@
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
 
-                    <!-- Microphone -->
 
                     <rect
                         x="8"
@@ -715,7 +938,6 @@
                         fill="white"
                     />
 
-                    <!-- Outer microphone arc -->
 
                     <path
                         d="M5 11C5 15.4183 7.68629 18 12 18C16.3137 18 19 15.4183 19 11"
@@ -724,7 +946,6 @@
                         stroke-linecap="round"
                     />
 
-                    <!-- Stand -->
 
                     <path
                         d="M12 18V22"
@@ -733,7 +954,6 @@
                         stroke-linecap="round"
                     />
 
-                    <!-- Base -->
 
                     <path
                         d="M9 22H15"
@@ -747,7 +967,7 @@
             </button>
 
 
-            <!-- Audio waveform -->
+            <!-- Waveform -->
 
             <div class="waveform">
 
@@ -768,7 +988,9 @@
     </main>
 
 
-    <!-- Hidden functional elements -->
+    <!-- =========================================================
+         HIDDEN FUNCTIONAL ELEMENTS
+    ========================================================== -->
 
     <div id="status">
         Tap microphone
@@ -777,7 +999,9 @@
     <div id="song"></div>
 
 
-    <!-- YouTube player -->
+    <!-- =========================================================
+         YOUTUBE VIDEO
+    ========================================================== -->
 
     <div
         id="player"
@@ -785,21 +1009,34 @@
 
         <iframe
             id="youtubePlayer"
-            allow="autoplay; encrypted-media"
+            title="YouTube video"
+            allow="
+                autoplay;
+                encrypted-media;
+                picture-in-picture;
+                web-share
+            "
             allowfullscreen>
         </iframe>
 
     </div>
 
 
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
     <script>
 
-        /* =========================
+        /* =====================================================
            ELEMENTS
-        ========================== */
+        ====================================================== */
 
         const mic =
             document.getElementById("mic");
+
+        const main =
+            document.getElementById("main");
 
         const voiceArea =
             document.getElementById("voiceArea");
@@ -817,9 +1054,9 @@
             document.getElementById("youtubePlayer");
 
 
-        /* =========================
-           SPEECH RECOGNITION
-        ========================== */
+        /* =====================================================
+           SPEECH API
+        ====================================================== */
 
         const SpeechRecognition =
             window.SpeechRecognition ||
@@ -836,6 +1073,7 @@
 
         } else {
 
+
             const recognition =
                 new SpeechRecognition();
 
@@ -843,16 +1081,18 @@
             recognition.lang =
                 "en-US";
 
+
             recognition.continuous =
                 false;
+
 
             recognition.interimResults =
                 false;
 
 
-            /* =========================
+            /* =================================================
                MICROPHONE CLICK
-            ========================== */
+            ================================================== */
 
             mic.addEventListener(
                 "click",
@@ -873,7 +1113,7 @@
                     } catch (error) {
 
                         console.error(
-                            "Recognition start error:",
+                            "Could not start speech recognition:",
                             error
                         );
 
@@ -883,9 +1123,9 @@
             );
 
 
-            /* =========================
+            /* =================================================
                SPEECH RESULT
-            ========================== */
+            ================================================== */
 
             recognition.onresult =
                 async (event) => {
@@ -900,6 +1140,14 @@
                         "Recognized:",
                         command
                     );
+
+
+                    status.textContent =
+                        "Searching...";
+
+
+                    song.textContent =
+                        command;
 
 
                     try {
@@ -924,6 +1172,10 @@
                             );
 
 
+                        /* =====================================
+                           RESPONSE
+                        ====================================== */
+
                         const data =
                             await response.json();
 
@@ -934,43 +1186,66 @@
                         );
 
 
-                        /* =========================
-                           ERROR RESPONSE
-                        ========================== */
+                        /* =====================================
+                           FAILED
+                        ====================================== */
 
                         if (
                             !response.ok ||
                             !data.success
                         ) {
 
-                            console.error(
+                            status.textContent =
                                 data.message ||
-                                "Song not found"
-                            );
+                                "Song not found";
 
                             return;
                         }
 
 
-                        /* =========================
-                           PLAY INSIDE PAGE
-                        ========================== */
+                        /* =====================================
+                           SUCCESS
+                        ====================================== */
 
-                        youtubePlayer.src =
-                            data.url;
-
-                        player.style.display =
-                            "block";
+                        status.textContent =
+                            "Playing";
 
 
                         song.textContent =
                             data.query;
 
 
-                        console.log(
-                            "Playing:",
-                            data.query
+                        /*
+                         * Your Flask backend returns
+                         * the YouTube embed URL.
+                         *
+                         * Example:
+                         *
+                         * https://www.youtube.com/embed/VIDEO_ID
+                         */
+
+                        youtubePlayer.src =
+                            data.url;
+
+
+                        /*
+                         * Show video.
+                         */
+
+                        player.style.display =
+                            "block";
+
+
+                        /*
+                         * Move microphone slightly
+                         * to the left so video fits
+                         * naturally on the right.
+                         */
+
+                        main.classList.add(
+                            "video-visible"
                         );
+
 
                     } catch (error) {
 
@@ -979,14 +1254,18 @@
                             error
                         );
 
+
+                        status.textContent =
+                            "Could not connect to server";
+
                     }
 
                 };
 
 
-            /* =========================
+            /* =================================================
                SPEECH ERROR
-            ========================== */
+            ================================================== */
 
             recognition.onerror =
                 (event) => {
@@ -996,16 +1275,29 @@
                         event.error
                     );
 
+
                     voiceArea.classList.remove(
                         "listening"
                     );
 
+
+                    if (
+                        event.error ===
+                        "not-allowed"
+                    ) {
+
+                        console.error(
+                            "Microphone permission denied."
+                        );
+
+                    }
+
                 };
 
 
-            /* =========================
+            /* =================================================
                SPEECH END
-            ========================== */
+            ================================================== */
 
             recognition.onend =
                 () => {
