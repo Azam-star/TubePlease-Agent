@@ -6,7 +6,7 @@ import random
 import urllib.request
 import urllib.error
 
-API_KEY = os.getenv("Default_Gemini_Project", "")
+API_KEY = os.getenv("Gemini API Key", "")
 MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 
 def generate_email_with_gemini(command):
