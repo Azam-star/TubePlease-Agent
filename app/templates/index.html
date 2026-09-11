@@ -12,107 +12,407 @@
 body{
     margin:0;
     height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(circle at 50% 45%,#43000f,transparent 35%),
+        radial-gradient(circle at 85% 20%,#300025,transparent 25%),
+        radial-gradient(circle at 15% 80%,#22000b,transparent 28%),
+        linear-gradient(135deg,#010102,#0d0208,#020203);
+}
+
+.youtube{
+    position:fixed;
+    top:25px;
+    left:30px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:22px;
+    font-weight:bold;
+    z-index:10;
+}
+
+.youtube-icon{
+    width:38px;
+    height:26px;
+    background:#ff0033;
+    border-radius:7px;
+    position:relative;
+    box-shadow:0 0 18px #ff003355;
+}
+
+.youtube-icon:after{
+    content:"";
+    position:absolute;
+    left:14px;
+    top:6px;
+    border-left:11px solid #fff;
+    border-top:7px solid transparent;
+    border-bottom:7px solid transparent;
+}
+
+.brand{
+    position:fixed;
+    top:27px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:22px;
+    font-weight:bold;
+    z-index:10;
+}
+
+.brand span{
+    color:#ff1744;
+}
+
+.gmail{
+    position:fixed;
+    top:25px;
+    right:30px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:22px;
+    font-weight:bold;
+    z-index:10;
+}
+
+.gmail-icon{
+    width:38px;
+    height:28px;
+    background:#fff;
+    border-radius:6px;
+    position:relative;
+    overflow:hidden;
+}
+
+.gmail-icon:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            35deg,
+            transparent 42%,
+            #ea4335 43%,
+            #ea4335 53%,
+            transparent 54%
+        ),
+        linear-gradient(
+            -35deg,
+            transparent 42%,
+            #c5221f 43%,
+            #c5221f 53%,
+            transparent 54%
+        );
+}
+
+.gmail-icon:after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:7px;
+    background:#ea4335;
+}
+
+.main{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:90px;
+    padding:80px 50px 40px;
+}
+
+.voice{
+    width:320px;
+    height:320px;
+    position:relative;
     display:grid;
     place-items:center;
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
+    border-radius:50%;
+    background:
+        radial-gradient(circle,
+        rgba(60,0,15,.5),
+        rgba(5,0,4,.92));
+    box-shadow:
+        0 0 35px rgba(255,0,45,.25),
+        0 0 90px rgba(255,0,45,.12);
+    flex-shrink:0;
 }
 
-.card{
-    width:400px;
-    padding:25px;
-    text-align:center;
-    background:#222;
-    border:1px solid #444;
-    border-radius:10px;
+.ring{
+    position:absolute;
+    border:1px solid #ff174455;
+    border-radius:50%;
+    animation:pulse 2s infinite;
 }
 
-.mic{
-    width:75px;
-    height:75px;
+.r1{width:300px;height:300px}
+.r2{width:250px;height:250px;animation-delay:.3s}
+.r3{width:200px;height:200px;animation-delay:.6s}
+
+#mic{
+    width:135px;
+    height:135px;
     border:0;
     border-radius:50%;
-    font-size:30px;
     cursor:pointer;
-    background:#eee;
+    display:grid;
+    place-items:center;
+    background:
+        radial-gradient(circle at 35% 25%,
+        #ff92a4,#ff1744 55%,#650016);
+    box-shadow:0 0 35px #ff174477;
+    z-index:2;
+    transition:.2s;
 }
 
-.mic.listening{
-    background:#aaa;
+#mic:hover{
+    transform:scale(1.07);
+    box-shadow:0 0 55px #ff1744cc;
 }
 
-.status{
-    margin:15px;
-    color:#aaa;
+#mic.listening{
+    animation:listen 1s infinite;
 }
 
-.command{
-    margin:10px;
-    color:#ccc;
+.mic-icon{
+    width:60px;
+    height:60px;
+}
+
+.result{
+    width:520px;
+    min-height:280px;
+    display:none;
+    padding:18px;
+    border:1px solid #ff174455;
+    border-radius:18px;
+    background:rgba(8,3,7,.82);
+    box-shadow:0 0 35px #ff174422;
+}
+
+.player iframe{
+    width:100%;
+    height:280px;
+    display:block;
+    border:0;
+    border-radius:12px;
+    background:#000;
 }
 
 .editor{
-    display:none;
-    margin-top:20px;
     text-align:left;
 }
 
 .recipient{
     color:#aaa;
     font-size:13px;
+    margin-bottom:10px;
 }
 
 input,
 textarea{
     width:100%;
     margin:6px 0;
-    padding:10px;
-    background:#111;
+    padding:12px;
+    background:#10080c;
     color:white;
-    border:1px solid #444;
-    border-radius:5px;
+    border:1px solid #ff174433;
+    border-radius:8px;
+    outline:none;
 }
 
 textarea{
-    height:130px;
-    resize:vertical;
+    height:150px;
+    resize:none;
 }
 
-button.action{
-    padding:10px 14px;
-    margin-top:5px;
+.action{
+    padding:10px 15px;
+    margin:6px 4px 0 0;
     border:0;
-    border-radius:5px;
+    border-radius:8px;
     cursor:pointer;
 }
 
 .primary{
-    background:#666;
-    color:white;
+    background:#ff1744;
+    color:#fff;
+}
+
+.secondary{
+    background:#333;
+    color:#fff;
+}
+
+.status{
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#aaa;
+    font-size:13px;
+}
+
+.command{
+    display:none;
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.08);
+        opacity:.65;
+    }
+}
+
+@keyframes listen{
+    50%{
+        box-shadow:
+            0 0 0 15px #ff174422,
+            0 0 70px #ff1744;
+    }
+}
+
+@media(max-width:1000px){
+
+    body{
+        overflow:auto;
+    }
+
+    .main{
+        flex-direction:column;
+        gap:25px;
+        padding-top:100px;
+    }
+
+    .result{
+        width:min(520px,90vw);
+    }
+
+    .youtube,
+    .gmail{
+        font-size:18px;
+    }
+
+    .youtube{left:15px}
+    .gmail{right:15px}
+}
+
+@media(max-width:600px){
+
+    .voice{
+        width:280px;
+        height:280px;
+    }
+
+    .r1{width:260px;height:260px}
+    .r2{width:220px;height:220px}
+    .r3{width:180px;height:180px}
+
+    #mic{
+        width:120px;
+        height:120px;
+    }
+
+    .mic-icon{
+        width:55px;
+        height:55px;
+    }
+
+    .result{
+        width:92vw;
+    }
+
+    .player iframe{
+        height:230px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="youtube">
+    <div class="youtube-icon"></div>
+    YouTube
+</div>
 
-    <h2>Miuh AI</h2>
+<div class="brand">
+    Miuh <span>AI</span>
+</div>
 
-    <p>Say a song name or create an email</p>
+<div class="gmail">
+    <div class="gmail-icon"></div>
+    Gmail
+</div>
 
-    <button id="mic" class="mic">
-        🎙️
-    </button>
+<div class="main">
 
-    <div id="status" class="status">
-        Tap microphone
+    <div id="voice" class="voice">
+
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+
+        <button id="mic" aria-label="Start voice command">
+
+            <svg
+                class="mic-icon"
+                viewBox="0 0 24 24"
+                fill="none">
+
+                <rect
+                    x="8"
+                    y="2"
+                    width="8"
+                    height="13"
+                    rx="4"
+                    fill="white"/>
+
+                <path
+                    d="M5 11C5 15 8 18 12 18C16 18 19 15 19 11"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+
+                <path
+                    d="M12 18V22"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+
+                <path
+                    d="M9 22H15"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+
+            </svg>
+
+        </button>
+
     </div>
 
-    <div id="command" class="command"></div>
+    <div id="youtubeResult" class="result player">
 
-    <div id="editor" class="editor">
+        <iframe
+            id="youtubePlayer"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
+    <div id="gmailResult" class="result editor">
 
         <div id="recipient" class="recipient"></div>
 
@@ -132,7 +432,7 @@ button.action{
 
         <button
             id="regen"
-            class="action">
+            class="action secondary">
             Regenerate
         </button>
 
@@ -140,13 +440,25 @@ button.action{
 
 </div>
 
+<div id="status" class="status">
+    Tap microphone
+</div>
+
+<div id="command" class="command"></div>
+
 <script>
+
 const $ = id => document.getElementById(id);
 
 const mic = $("mic");
+const voice = $("voice");
 const status = $("status");
 const commandBox = $("command");
-const editor = $("editor");
+
+const youtubeResult = $("youtubeResult");
+const youtubePlayer = $("youtubePlayer");
+
+const gmailResult = $("gmailResult");
 const recipient = $("recipient");
 const subject = $("subject");
 const body = $("body");
@@ -160,7 +472,6 @@ let listening = false;
 let lastCommand = "";
 let emailGenerated = false;
 let generatingEmail = false;
-let youtubeTab = null;
 
 if(!SR){
 
@@ -208,8 +519,8 @@ if(!SR){
 
         const text =
             e.results[0][0]
-                .transcript
-                .trim();
+            .transcript
+            .trim();
 
         if(!text){
 
@@ -220,7 +531,6 @@ if(!SR){
         }
 
         lastCommand = text;
-
         commandBox.textContent = text;
 
         processCommand(text);
@@ -260,6 +570,9 @@ function isYouTube(command){
 
 async function processCommand(command){
 
+    youtubeResult.style.display = "none";
+    gmailResult.style.display = "none";
+
     const gmail = isGmail(command);
     const youtube = isYouTube(command);
 
@@ -280,6 +593,9 @@ async function processCommand(command){
 
             status.textContent =
                 "Email already generated.";
+
+            gmailResult.style.display =
+                "block";
 
             return;
         }
@@ -382,7 +698,14 @@ async function processCommand(command){
                 );
             }
 
-            playYouTube(data);
+            youtubePlayer.src =
+                data.url;
+
+            youtubeResult.style.display =
+                "block";
+
+            status.textContent =
+                "Playing";
 
         }catch(error){
 
@@ -397,7 +720,7 @@ async function processCommand(command){
     }
 
     status.textContent =
-        "Please say 'create email' or 'play song'.";
+        "Say 'play a song' or 'create an email'.";
 }
 
 function showEmail(data){
@@ -416,7 +739,7 @@ function showEmail(data){
     body.value =
         data.body || "";
 
-    editor.style.display =
+    gmailResult.style.display =
         "block";
 
     status.textContent =
@@ -457,34 +780,19 @@ $("open").onclick = () => {
 
 $("regen").onclick = () => {
 
-    status.textContent =
-        "Email already generated. Edit the existing email.";
-};
+    if(!lastCommand){
 
-function playYouTube(data){
+        status.textContent =
+            "Create an email first.";
 
-    if(
-        !youtubeTab ||
-        youtubeTab.closed
-    ){
-
-        youtubeTab =
-            window.open(
-                data.url,
-                "MiuhYouTube"
-            );
-
-    }else{
-
-        youtubeTab.location.href =
-            data.url;
-
-        youtubeTab.focus();
+        return;
     }
 
-    status.textContent =
-        "Playing";
-}
+    emailGenerated = false;
+
+    processCommand(lastCommand);
+};
+
 </script>
 
 </body>
