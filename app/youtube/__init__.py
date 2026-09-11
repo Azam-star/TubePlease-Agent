@@ -15,36 +15,52 @@ youtube_bp = Blueprint(
 )
 def play():
 
-    data = request.get_json(
-        silent=True
-    ) or {}
+    try:
 
-    command = data.get(
-        "command",
-        ""
-    ).strip()
+        data = request.get_json(
+            silent=True
+        ) or {}
 
-    if not command:
+        command = str(
+            data.get("command", "")
+        ).strip()
+
+        if not command:
+
+            return jsonify({
+                "success": False,
+                "message": "Song name is required"
+            }), 400
+
+        url = create_youtube_url(
+            command
+        )
+
+        if not url:
+
+            return jsonify({
+                "success": False,
+                "message": (
+                    "Could not find the song on YouTube"
+                )
+            }), 404
+
+        return jsonify({
+            "success": True,
+            "type": "youtube",
+            "query": command,
+            "url": url
+        })
+
+    except Exception as e:
+
+        print(
+            "YouTube route error:",
+            repr(e)
+        )
 
         return jsonify({
             "success": False,
-            "message": "Song name is required"
-        }), 400
-
-    url = create_youtube_url(
-        command
-    )
-
-    if not url:
-
-        return jsonify({
-            "success": False,
-            "message": "Could not find the song"
-        }), 404
-
-    return jsonify({
-        "success": True,
-        "type": "youtube",
-        "query": command,
-        "url": url
-    })
+            "message": "YouTube search failed",
+            "error": str(e)
+        }), 500
