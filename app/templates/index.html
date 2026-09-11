@@ -2,504 +2,596 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Miuh AI</title>
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+>
+
+<title>MIUH AI</title>
+
 
 <style>
-*{box-sizing:border-box}
 
 body{
+
     margin:0;
+
     height:100vh;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:Arial,sans-serif;
-    color:white;
-    background:
-        radial-gradient(circle at 50% 45%,#4a0013,transparent 35%),
-        radial-gradient(circle at 85% 20%,#3b002d,transparent 25%),
-        radial-gradient(circle at 15% 80%,#26000d,transparent 28%),
-        linear-gradient(135deg,#010102,#0d0208,#020203);
-}
-
-/* YouTube */
-
-.youtube{
-    position:fixed;
-    top:25px;
-    left:30px;
-
-    display:flex;
-    align-items:center;
-    gap:9px;
-
-    font-size:22px;
-    font-weight:bold;
-    z-index:10;
-}
-
-.youtube-icon{
-    width:38px;
-    height:26px;
-    background:#ff0033;
-    border-radius:7px;
-    position:relative;
-    box-shadow:0 0 18px #ff003355;
-}
-
-.youtube-icon:after{
-    content:"";
-    position:absolute;
-    left:14px;
-    top:6px;
-    border-left:11px solid white;
-    border-top:7px solid transparent;
-    border-bottom:7px solid transparent;
-}
-
-/* Gmail */
-
-.gmail{
-    position:fixed;
-    top:25px;
-    right:30px;
-
-    display:flex;
-    align-items:center;
-    gap:9px;
-
-    font-size:22px;
-    font-weight:bold;
-
-    z-index:10;
-}
-
-.gmail-icon{
-    width:38px;
-    height:28px;
-
-    position:relative;
-
-    border-radius:6px;
-
-    background:#fff;
-
-    overflow:hidden;
-
-    box-shadow:0 0 18px #ff3b5d33;
-}
-
-.gmail-icon:before{
-    content:"";
-
-    position:absolute;
-    left:0;
-    top:0;
-
-    width:100%;
-    height:100%;
-
-    background:
-        linear-gradient(
-            145deg,
-            transparent 43%,
-            #ea4335 44%,
-            #ea4335 51%,
-            transparent 52%
-        ),
-        linear-gradient(
-            215deg,
-            transparent 43%,
-            #c5221f 44%,
-            #c5221f 51%,
-            transparent 52%
-        );
-}
-
-.gmail-icon:after{
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    top:0;
-
-    height:8px;
-
-    background:#ea4335;
-}
-
-/* Miuh AI */
-
-.brand{
-    position:fixed;
-    top:27px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    font-size:22px;
-    font-weight:bold;
-
-    z-index:10;
-
-    text-shadow:0 0 18px #ff174433;
-}
-
-.brand span{
-    color:#ff1744;
-}
-
-/* Main */
-
-.main{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:70px;
-    transition:.5s;
-}
-
-/* Mic */
-
-.voice{
-    width:320px;
-    height:320px;
-
-    position:relative;
 
     display:grid;
+
     place-items:center;
 
-    border-radius:50%;
+    background:#111;
 
-    background:
-        radial-gradient(
-            circle,
-            rgba(55,0,12,.45),
-            rgba(5,0,4,.9)
-        );
+    color:white;
 
-    box-shadow:
-        0 0 35px rgba(255,0,45,.25),
-        0 0 80px rgba(255,0,45,.10);
-
-    transition:.5s;
+    font-family:Arial;
 }
 
-.ring{
-    position:absolute;
 
-    border:1px solid #ff174455;
+.card{
 
-    border-radius:50%;
+    width:400px;
 
-    animation:pulse 2s infinite;
+    padding:25px;
 
-    pointer-events:none;
+    text-align:center;
+
+    background:#222;
+
+    border:1px solid #444;
+
+    border-radius:10px;
 }
 
-.r1{
-    width:300px;
-    height:300px;
-}
 
-.r2{
-    width:250px;
-    height:250px;
+.mic{
 
-    animation-delay:.3s;
-}
+    width:75px;
 
-.r3{
-    width:200px;
-    height:200px;
-
-    animation-delay:.6s;
-}
-
-#mic{
-    width:135px;
-    height:135px;
+    height:75px;
 
     border:0;
+
     border-radius:50%;
+
+    font-size:30px;
 
     cursor:pointer;
 
-    display:grid;
-    place-items:center;
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #ff92a4,
-            #ff1744 55%,
-            #650016
-        );
-
-    box-shadow:0 0 35px #ff174477;
-
-    z-index:2;
-
-    transition:.2s;
+    background:#eee;
 }
 
-#mic:hover{
-    transform:scale(1.07);
-    box-shadow:0 0 55px #ff1744cc;
+
+.mic.listening{
+
+    background:#aaa;
 }
 
-#mic.listening{
-    animation:listen 1s infinite;
+
+.status{
+
+    margin:15px;
+
+    color:#aaa;
 }
 
-.mic-icon{
-    width:60px;
-    height:60px;
+
+.command{
+
+    margin:10px;
+
+    color:#ccc;
 }
 
-/* Video */
 
-.player{
+.editor{
+
     display:none;
-    width:500px;
+
+    margin-top:20px;
+
+    text-align:left;
 }
 
-.player iframe{
+
+.recipient{
+
+    color:#aaa;
+
+    font-size:13px;
+}
+
+
+input,
+textarea{
+
     width:100%;
-    height:280px;
 
-    border:1px solid #ff174455;
-    border-radius:16px;
+    margin:6px 0;
 
-    background:#000;
+    padding:10px;
 
-    box-shadow:0 0 30px #ff174422;
+    box-sizing:border-box;
+
+    background:#111;
+
+    color:white;
+
+    border:1px solid #444;
+
+    border-radius:5px;
 }
 
-/* Animations */
 
-@keyframes pulse{
-    50%{
-        transform:scale(1.08);
-        opacity:.65;
-    }
+textarea{
+
+    height:130px;
+
+    resize:vertical;
 }
 
-@keyframes listen{
-    50%{
-        box-shadow:
-            0 0 0 15px #ff174422,
-            0 0 70px #ff1744;
-    }
+
+button.action{
+
+    padding:10px 14px;
+
+    margin-top:5px;
+
+    border:0;
+
+    border-radius:5px;
+
+    cursor:pointer;
 }
 
-/* Mobile */
 
-@media(max-width:900px){
+.primary{
 
-    body{
-        overflow:auto;
-    }
+    background:#666;
 
-    .main{
-        flex-direction:column;
-        gap:20px;
-    }
-
-    .voice{
-        width:300px;
-        height:300px;
-    }
-
-    .r1{
-        width:280px;
-        height:280px;
-    }
-
-    .r2{
-        width:235px;
-        height:235px;
-    }
-
-    .r3{
-        width:190px;
-        height:190px;
-    }
-
-    .player{
-        width:90vw;
-    }
-
-    .player iframe{
-        height:230px;
-    }
-
-    .youtube,
-    .gmail{
-        font-size:18px;
-    }
-
-    .youtube{
-        left:15px;
-    }
-
-    .gmail{
-        right:15px;
-    }
+    color:white;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
-<div class="youtube">
-    <div class="youtube-icon"></div>
-    YouTube
+
+<div class="card">
+
+
+<h2>Nova AI</h2>
+
+
+<p>
+    Say a song name or create an email
+</p>
+
+
+<button
+    id="mic"
+    class="mic"
+>
+    🎙️
+</button>
+
+
+<div
+    id="status"
+    class="status"
+>
+    Tap microphone
 </div>
 
-<div class="brand">
-    Miuh <span>AI</span>
-</div>
 
-<div class="gmail">
-    <div class="gmail-icon"></div>
-    Gmail
-</div>
+<div
+    id="command"
+    class="command"
+></div>
 
-<div id="main" class="main">
 
-    <div id="voice" class="voice">
 
-        <div class="ring r1"></div>
-        <div class="ring r2"></div>
-        <div class="ring r3"></div>
+<!-- Gmail Editor -->
 
-        <button id="mic" aria-label="Start voice search">
+<div
+    id="editor"
+    class="editor"
+>
 
-            <svg
-                class="mic-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
 
-                <rect
-                    x="8"
-                    y="2"
-                    width="8"
-                    height="13"
-                    rx="4"
-                    fill="white"/>
+    <div
+        id="recipient"
+        class="recipient"
+    ></div>
 
-                <path
-                    d="M5 11C5 15 8 18 12 18C16 18 19 15 19 11"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"/>
 
-                <path
-                    d="M12 18V22"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"/>
+    <input
+        id="subject"
+        placeholder="Email subject"
+    >
 
-                <path
-                    d="M9 22H15"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"/>
 
-            </svg>
+    <textarea
+        id="body"
+        placeholder="Email body"
+    ></textarea>
 
-        </button>
 
-    </div>
+    <button
+        id="open"
+        class="action primary"
+    >
+        Open in Gmail
+    </button>
 
-    <div id="player" class="player">
 
-        <iframe
-            id="youtubePlayer"
-            allow="autoplay; encrypted-media"
-            allowfullscreen>
-        </iframe>
+    <button
+        id="regen"
+        class="action"
+    >
+        Regenerate
+    </button>
 
-    </div>
 
 </div>
+
+
+</div>
+
+
 
 <script>
 
+
+// --------------------------------------------------
+// DOM REFERENCES
+// --------------------------------------------------
+
+const $ =
+    id => document.getElementById(id);
+
+
 const mic =
-    document.getElementById("mic");
+    $("mic");
 
-const voice =
-    document.getElementById("voice");
 
-const player =
-    document.getElementById("player");
+const status =
+    $("status");
 
-const youtubePlayer =
-    document.getElementById("youtubePlayer");
 
-const SpeechRecognition =
+const commandBox =
+    $("command");
+
+
+const editor =
+    $("editor");
+
+
+const recipient =
+    $("recipient");
+
+
+const subject =
+    $("subject");
+
+
+const body =
+    $("body");
+
+
+
+// --------------------------------------------------
+// SPEECH RECOGNITION
+// --------------------------------------------------
+
+const SR =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-if(!SpeechRecognition){
 
-    mic.disabled=true;
+let recognition;
 
-    console.error(
-        "Speech recognition not supported"
-    );
+let listening = false;
 
-}else{
 
-    const recognition =
-        new SpeechRecognition();
 
-    recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
+// --------------------------------------------------
+// COMMAND STATE
+// --------------------------------------------------
 
-    mic.onclick=()=>{
+let lastCommand = "";
+
+
+// Prevent duplicate email generation
+
+let emailGenerated = false;
+
+
+// Prevent multiple requests at the same time
+
+let generatingEmail = false;
+
+
+// YouTube tab
+
+let youtubeTab = null;
+
+
+
+// --------------------------------------------------
+// SPEECH RECOGNITION SETUP
+// --------------------------------------------------
+
+if(!SR){
+
+    status.textContent =
+        "Speech recognition unavailable";
+
+    mic.disabled = true;
+
+}
+else{
+
+    recognition =
+        new SR();
+
+
+    recognition.lang =
+        "en-US";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+
+    recognition.onstart = () => {
+
+        listening = true;
+
+        mic.classList.add(
+            "listening"
+        );
+
+        status.textContent =
+            "Listening...";
+
+    };
+
+
+
+    recognition.onend = () => {
+
+        listening = false;
+
+        mic.classList.remove(
+            "listening"
+        );
+
+    };
+
+
+
+    recognition.onerror = e => {
+
+        listening = false;
+
+        mic.classList.remove(
+            "listening"
+        );
+
+        status.textContent =
+            "Voice error: " +
+            e.error;
+
+    };
+
+
+
+    recognition.onresult = e => {
+
+        const text =
+            e.results[0][0]
+            .transcript
+            .trim();
+
+
+        if(!text){
+
+            status.textContent =
+                "No command detected";
+
+            return;
+
+        }
+
+
+        lastCommand =
+            text;
+
+
+        commandBox.textContent =
+            text;
+
+
+        processCommand(
+            text
+        );
+
+    };
+
+
+
+    mic.onclick = () => {
+
+        if(listening)
+            return;
+
 
         try{
 
             recognition.start();
 
-            mic.classList.add("listening");
+        }
+        catch(e){
 
-        }catch(error){
-
-            console.error(error);
+            console.log(e);
 
         }
+
     };
 
-    recognition.onresult=async event=>{
+}
 
-        const command =
-            event.results[0][0]
-            .transcript
-            .trim();
 
-        console.log(
-            "Recognized:",
-            command
-        );
+
+// --------------------------------------------------
+// GMAIL KEYWORD DETECTION
+// --------------------------------------------------
+//
+// Gmail requires BOTH:
+//
+// create
+// email
+//
+// Examples:
+//
+// "create email for my boss"
+// "create an email for my manager"
+//
+// --------------------------------------------------
+
+function isGmail(command){
+
+    const hasCreate =
+        /\bcreate\b/i.test(command);
+
+
+    const hasEmail =
+        /\bemail\b/i.test(command);
+
+
+    return (
+        hasCreate &&
+        hasEmail
+    );
+
+}
+
+
+
+// --------------------------------------------------
+// YOUTUBE KEYWORD DETECTION
+// --------------------------------------------------
+//
+// YouTube requires:
+//
+// play
+//
+// OR
+//
+// song
+//
+// Examples:
+//
+// "play believer"
+// "play a song"
+// "song believer"
+//
+// --------------------------------------------------
+
+function isYouTube(command){
+
+    return (
+        /\bplay\b/i.test(command) ||
+        /\bsong\b/i.test(command)
+    );
+
+}
+
+
+
+// --------------------------------------------------
+// MAIN COMMAND PROCESSOR
+// --------------------------------------------------
+
+async function processCommand(command){
+
+
+    // ----------------------------------------------
+    // CHECK COMMAND TYPE
+    // ----------------------------------------------
+
+    const gmail =
+        isGmail(command);
+
+
+    const youtube =
+        isYouTube(command);
+
+
+
+    // ----------------------------------------------
+    // GMAIL COMMAND
+    // ----------------------------------------------
+
+    if(gmail){
+
+        // Prevent duplicate generation
+
+        if(generatingEmail){
+
+            status.textContent =
+                "Email is already being generated...";
+
+            return;
+
+        }
+
+
+        // Prevent the same command from generating
+        // another email
+
+        if(
+            emailGenerated &&
+            command === lastCommand
+        ){
+
+            status.textContent =
+                "Email already generated.";
+
+            return;
+
+        }
+
+
+        generatingEmail = true;
+
+
+        status.textContent =
+            "Generating email...";
+
 
         try{
 
+
             const response =
                 await fetch(
-                    "/youtube/play",
+                    "/agent",
                     {
+
                         method:"POST",
 
                         headers:{
@@ -511,63 +603,304 @@ if(!SpeechRecognition){
                             JSON.stringify({
                                 command:command
                             })
+
                     }
                 );
 
+
+
             const data =
                 await response.json();
+
+
 
             if(
                 !response.ok ||
                 !data.success
             ){
 
-                console.error(
+                throw Error(
                     data.message ||
-                    "Song not found"
+                    "Email request failed"
                 );
 
-                return;
             }
 
-            youtubePlayer.src =
-                data.url;
 
-            player.style.display =
-                "block";
 
-        }catch(error){
+            // Show ONE generated email
+
+            showEmail(
+                data
+            );
+
+
+            emailGenerated = true;
+
+
+        }
+        catch(error){
 
             console.error(
-                "Backend error:",
                 error
             );
 
+
+            status.textContent =
+                error.message ||
+                "Email generation failed";
+
         }
-    };
+        finally{
 
-    recognition.onerror=event=>{
+            generatingEmail = false;
 
-        console.error(
-            "Mic error:",
-            event.error
-        );
+        }
 
-        mic.classList.remove(
-            "listening"
-        );
-    };
 
-    recognition.onend=()=>{
+        return;
 
-        mic.classList.remove(
-            "listening"
-        );
+    }
 
-    };
+
+
+    // ----------------------------------------------
+    // YOUTUBE COMMAND
+    // ----------------------------------------------
+
+    else if(youtube){
+
+        status.textContent =
+            "Finding song...";
+
+
+        try{
+
+
+            const response =
+                await fetch(
+                    "/youtube/play",
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                command:command
+                            })
+
+                    }
+                );
+
+
+
+            const data =
+                await response.json();
+
+
+
+            if(
+                !response.ok ||
+                !data.success
+            ){
+
+                throw Error(
+                    data.message ||
+                    "YouTube request failed"
+                );
+
+            }
+
+
+
+            playYouTube(
+                data
+            );
+
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+
+            status.textContent =
+                error.message ||
+                "YouTube request failed";
+
+        }
+
+
+        return;
+
+    }
+
+
+
+    // ----------------------------------------------
+    // UNKNOWN COMMAND
+    // ----------------------------------------------
+
+    else{
+
+        status.textContent =
+            "Please say 'create email' or 'play song'.";
+
+        return;
+
+    }
+
 }
+
+
+
+// --------------------------------------------------
+// SHOW GENERATED EMAIL
+// --------------------------------------------------
+
+function showEmail(data){
+
+
+    recipient.dataset.email =
+        data.recipient || "";
+
+
+    recipient.textContent =
+        data.recipient
+        ? "To: " + data.recipient
+        : "Recipient not specified";
+
+
+    subject.value =
+        data.subject || "";
+
+
+    body.value =
+        data.body || "";
+
+
+    editor.style.display =
+        "block";
+
+
+    status.textContent =
+        "Email ready. Review or edit it.";
+
+}
+
+
+
+// --------------------------------------------------
+// OPEN GMAIL
+// --------------------------------------------------
+
+$("open").onclick = () => {
+
+
+    const url =
+        "https://mail.google.com/mail/u/0/?" +
+
+        new URLSearchParams({
+
+            view:"cm",
+
+            fs:"1",
+
+            to:
+                recipient.dataset.email || "",
+
+            su:
+                subject.value,
+
+            body:
+                body.value
+
+        });
+
+
+
+    const win =
+        window.open(
+            url,
+            "NovaGmail"
+        );
+
+
+
+    if(!win){
+
+        status.textContent =
+            "Please allow popups for this site.";
+
+    }
+
+};
+
+
+
+// --------------------------------------------------
+// REGENERATE BUTTON
+// --------------------------------------------------
+//
+// No automatic second generation.
+//
+// Clicking this button also does NOT call /agent.
+// --------------------------------------------------
+
+$("regen").onclick = () => {
+
+    status.textContent =
+        "Email already generated. Edit the existing email.";
+
+};
+
+
+
+// --------------------------------------------------
+// YOUTUBE PLAYBACK
+// --------------------------------------------------
+
+function playYouTube(data){
+
+
+    if(
+        !youtubeTab ||
+        youtubeTab.closed
+    ){
+
+        youtubeTab =
+            window.open(
+                data.url,
+                "NovaYouTube"
+            );
+
+    }
+    else{
+
+        youtubeTab.location.href =
+            data.url;
+
+        youtubeTab.focus();
+
+    }
+
+
+    status.textContent =
+        "Playing";
+
+}
+
 
 </script>
 
+
 </body>
+
 </html>
