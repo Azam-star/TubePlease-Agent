@@ -2,333 +2,165 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
->
-
-<title>Nova AI</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Miuh AI</title>
 
 <style>
+*{box-sizing:border-box}
 
 body{
-
     margin:0;
-
     height:100vh;
-
     display:grid;
-
     place-items:center;
-
     background:#111;
-
     color:white;
-
-    font-family:Arial;
+    font-family:Arial,sans-serif;
 }
 
-
 .card{
-
     width:400px;
-
     padding:25px;
-
     text-align:center;
-
     background:#222;
-
     border:1px solid #444;
-
     border-radius:10px;
 }
 
-
 .mic{
-
     width:75px;
-
     height:75px;
-
     border:0;
-
     border-radius:50%;
-
     font-size:30px;
-
     cursor:pointer;
-
     background:#eee;
 }
 
-
 .mic.listening{
-
     background:#aaa;
 }
 
-
 .status{
-
     margin:15px;
-
     color:#aaa;
 }
 
-
 .command{
-
     margin:10px;
-
     color:#ccc;
 }
 
-
 .editor{
-
     display:none;
-
     margin-top:20px;
-
     text-align:left;
 }
 
-
 .recipient{
-
     color:#aaa;
-
     font-size:13px;
 }
 
-
 input,
 textarea{
-
     width:100%;
-
     margin:6px 0;
-
     padding:10px;
-
-    box-sizing:border-box;
-
     background:#111;
-
     color:white;
-
     border:1px solid #444;
-
     border-radius:5px;
 }
 
-
 textarea{
-
     height:130px;
-
     resize:vertical;
 }
 
-
 button.action{
-
     padding:10px 14px;
-
     margin-top:5px;
-
     border:0;
-
     border-radius:5px;
-
     cursor:pointer;
 }
 
-
 .primary{
-
     background:#666;
-
     color:white;
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="card">
 
+    <h2>Miuh AI</h2>
 
-<h2>Nova AI</h2>
+    <p>Say a song name or create an email</p>
 
-
-<p>
-    Say a song name or create an email
-</p>
-
-
-<button
-    id="mic"
-    class="mic"
->
-    🎙️
-</button>
-
-
-<div
-    id="status"
-    class="status"
->
-    Tap microphone
-</div>
-
-
-<div
-    id="command"
-    class="command"
-></div>
-
-
-
-<!-- Gmail Editor -->
-
-<div
-    id="editor"
-    class="editor"
->
-
-
-    <div
-        id="recipient"
-        class="recipient"
-    ></div>
-
-
-    <input
-        id="subject"
-        placeholder="Email subject"
-    >
-
-
-    <textarea
-        id="body"
-        placeholder="Email body"
-    ></textarea>
-
-
-    <button
-        id="open"
-        class="action primary"
-    >
-        Open in Gmail
+    <button id="mic" class="mic">
+        🎙️
     </button>
 
+    <div id="status" class="status">
+        Tap microphone
+    </div>
 
-    <button
-        id="regen"
-        class="action"
-    >
-        Regenerate
-    </button>
+    <div id="command" class="command"></div>
 
+    <div id="editor" class="editor">
+
+        <div id="recipient" class="recipient"></div>
+
+        <input
+            id="subject"
+            placeholder="Email subject">
+
+        <textarea
+            id="body"
+            placeholder="Email body"></textarea>
+
+        <button
+            id="open"
+            class="action primary">
+            Open in Gmail
+        </button>
+
+        <button
+            id="regen"
+            class="action">
+            Regenerate
+        </button>
+
+    </div>
 
 </div>
-
-
-</div>
-
-
 
 <script>
+const $ = id => document.getElementById(id);
 
-
-// --------------------------------------------------
-// DOM REFERENCES
-// --------------------------------------------------
-
-const $ =
-    id => document.getElementById(id);
-
-
-const mic =
-    $("mic");
-
-
-const status =
-    $("status");
-
-
-const commandBox =
-    $("command");
-
-
-const editor =
-    $("editor");
-
-
-const recipient =
-    $("recipient");
-
-
-const subject =
-    $("subject");
-
-
-const body =
-    $("body");
-
-
-
-// --------------------------------------------------
-// SPEECH RECOGNITION
-// --------------------------------------------------
+const mic = $("mic");
+const status = $("status");
+const commandBox = $("command");
+const editor = $("editor");
+const recipient = $("recipient");
+const subject = $("subject");
+const body = $("body");
 
 const SR =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
 let recognition;
-
 let listening = false;
-
-
-
-// --------------------------------------------------
-// COMMAND STATE
-// --------------------------------------------------
-
 let lastCommand = "";
-
-
-// Prevent duplicate email generation
-
 let emailGenerated = false;
-
-
-// Prevent multiple requests at the same time
-
 let generatingEmail = false;
-
-
-// YouTube tab
-
 let youtubeTab = null;
-
-
-
-// --------------------------------------------------
-// SPEECH RECOGNITION SETUP
-// --------------------------------------------------
 
 if(!SR){
 
@@ -337,76 +169,47 @@ if(!SR){
 
     mic.disabled = true;
 
-}
-else{
+}else{
 
-    recognition =
-        new SR();
+    recognition = new SR();
 
-
-    recognition.lang =
-        "en-US";
-
-
-    recognition.continuous =
-        false;
-
-
-    recognition.interimResults =
-        false;
-
-
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
     recognition.onstart = () => {
 
         listening = true;
 
-        mic.classList.add(
-            "listening"
-        );
+        mic.classList.add("listening");
 
         status.textContent =
             "Listening...";
-
     };
-
-
 
     recognition.onend = () => {
 
         listening = false;
 
-        mic.classList.remove(
-            "listening"
-        );
-
+        mic.classList.remove("listening");
     };
-
-
 
     recognition.onerror = e => {
 
         listening = false;
 
-        mic.classList.remove(
-            "listening"
-        );
+        mic.classList.remove("listening");
 
         status.textContent =
-            "Voice error: " +
-            e.error;
-
+            "Voice error: " + e.error;
     };
-
-
 
     recognition.onresult = e => {
 
         const text =
             e.results[0][0]
-            .transcript
-            .trim();
-
+                .transcript
+                .trim();
 
         if(!text){
 
@@ -414,103 +217,38 @@ else{
                 "No command detected";
 
             return;
-
         }
 
+        lastCommand = text;
 
-        lastCommand =
-            text;
+        commandBox.textContent = text;
 
-
-        commandBox.textContent =
-            text;
-
-
-        processCommand(
-            text
-        );
-
+        processCommand(text);
     };
-
-
 
     mic.onclick = () => {
 
-        if(listening)
-            return;
-
+        if(listening) return;
 
         try{
 
             recognition.start();
 
-        }
-        catch(e){
+        }catch(e){
 
             console.log(e);
 
         }
-
     };
-
 }
-
-
-
-// --------------------------------------------------
-// GMAIL KEYWORD DETECTION
-// --------------------------------------------------
-//
-// Gmail requires BOTH:
-//
-// create
-// email
-//
-// Examples:
-//
-// "create email for my boss"
-// "create an email for my manager"
-//
-// --------------------------------------------------
 
 function isGmail(command){
 
-    const hasCreate =
-        /\bcreate\b/i.test(command);
-
-
-    const hasEmail =
-        /\bemail\b/i.test(command);
-
-
     return (
-        hasCreate &&
-        hasEmail
+        /\bcreate\b/i.test(command) &&
+        /\bemail\b/i.test(command)
     );
-
 }
-
-
-
-// --------------------------------------------------
-// YOUTUBE KEYWORD DETECTION
-// --------------------------------------------------
-//
-// YouTube requires:
-//
-// play
-//
-// OR
-//
-// song
-//
-// Examples:
-//
-// "play believer"
-// "play a song"
-// "song believer"
-//
-// --------------------------------------------------
 
 function isYouTube(command){
 
@@ -518,38 +256,14 @@ function isYouTube(command){
         /\bplay\b/i.test(command) ||
         /\bsong\b/i.test(command)
     );
-
 }
-
-
-
-// --------------------------------------------------
-// MAIN COMMAND PROCESSOR
-// --------------------------------------------------
 
 async function processCommand(command){
 
-
-    // ----------------------------------------------
-    // CHECK COMMAND TYPE
-    // ----------------------------------------------
-
-    const gmail =
-        isGmail(command);
-
-
-    const youtube =
-        isYouTube(command);
-
-
-
-    // ----------------------------------------------
-    // GMAIL COMMAND
-    // ----------------------------------------------
+    const gmail = isGmail(command);
+    const youtube = isYouTube(command);
 
     if(gmail){
-
-        // Prevent duplicate generation
 
         if(generatingEmail){
 
@@ -557,12 +271,7 @@ async function processCommand(command){
                 "Email is already being generated...";
 
             return;
-
         }
-
-
-        // Prevent the same command from generating
-        // another email
 
         if(
             emailGenerated &&
@@ -573,25 +282,19 @@ async function processCommand(command){
                 "Email already generated.";
 
             return;
-
         }
 
-
         generatingEmail = true;
-
 
         status.textContent =
             "Generating email...";
 
-
         try{
-
 
             const response =
                 await fetch(
                     "/agent",
                     {
-
                         method:"POST",
 
                         headers:{
@@ -603,85 +306,54 @@ async function processCommand(command){
                             JSON.stringify({
                                 command:command
                             })
-
                     }
                 );
 
-
-
             const data =
                 await response.json();
-
-
 
             if(
                 !response.ok ||
                 !data.success
             ){
 
-                throw Error(
+                throw new Error(
                     data.message ||
                     "Email request failed"
                 );
-
             }
 
-
-
-            // Show ONE generated email
-
-            showEmail(
-                data
-            );
-
+            showEmail(data);
 
             emailGenerated = true;
 
+        }catch(error){
 
-        }
-        catch(error){
-
-            console.error(
-                error
-            );
-
+            console.error(error);
 
             status.textContent =
                 error.message ||
                 "Email generation failed";
 
-        }
-        finally{
+        }finally{
 
             generatingEmail = false;
-
         }
 
-
         return;
-
     }
 
-
-
-    // ----------------------------------------------
-    // YOUTUBE COMMAND
-    // ----------------------------------------------
-
-    else if(youtube){
+    if(youtube){
 
         status.textContent =
             "Finding song...";
 
-
         try{
-
 
             const response =
                 await fetch(
                     "/youtube/play",
                     {
-
                         method:"POST",
 
                         headers:{
@@ -693,124 +365,71 @@ async function processCommand(command){
                             JSON.stringify({
                                 command:command
                             })
-
                     }
                 );
 
-
-
             const data =
                 await response.json();
-
-
 
             if(
                 !response.ok ||
                 !data.success
             ){
 
-                throw Error(
+                throw new Error(
                     data.message ||
                     "YouTube request failed"
                 );
-
             }
 
+            playYouTube(data);
 
+        }catch(error){
 
-            playYouTube(
-                data
-            );
-
-
-        }
-        catch(error){
-
-            console.error(
-                error
-            );
-
+            console.error(error);
 
             status.textContent =
                 error.message ||
                 "YouTube request failed";
-
         }
 
-
         return;
-
     }
 
-
-
-    // ----------------------------------------------
-    // UNKNOWN COMMAND
-    // ----------------------------------------------
-
-    else{
-
-        status.textContent =
-            "Please say 'create email' or 'play song'.";
-
-        return;
-
-    }
-
+    status.textContent =
+        "Please say 'create email' or 'play song'.";
 }
-
-
-
-// --------------------------------------------------
-// SHOW GENERATED EMAIL
-// --------------------------------------------------
 
 function showEmail(data){
 
-
     recipient.dataset.email =
         data.recipient || "";
-
 
     recipient.textContent =
         data.recipient
         ? "To: " + data.recipient
         : "Recipient not specified";
 
-
     subject.value =
         data.subject || "";
-
 
     body.value =
         data.body || "";
 
-
     editor.style.display =
         "block";
 
-
     status.textContent =
         "Email ready. Review or edit it.";
-
 }
-
-
-
-// --------------------------------------------------
-// OPEN GMAIL
-// --------------------------------------------------
 
 $("open").onclick = () => {
 
-
     const url =
         "https://mail.google.com/mail/u/0/?" +
-
         new URLSearchParams({
 
             view:"cm",
-
             fs:"1",
 
             to:
@@ -821,54 +440,28 @@ $("open").onclick = () => {
 
             body:
                 body.value
-
         });
-
-
 
     const win =
         window.open(
             url,
-            "NovaGmail"
+            "MiuhGmail"
         );
-
-
 
     if(!win){
 
         status.textContent =
             "Please allow popups for this site.";
-
     }
-
 };
-
-
-
-// --------------------------------------------------
-// REGENERATE BUTTON
-// --------------------------------------------------
-//
-// No automatic second generation.
-//
-// Clicking this button also does NOT call /agent.
-// --------------------------------------------------
 
 $("regen").onclick = () => {
 
     status.textContent =
         "Email already generated. Edit the existing email.";
-
 };
 
-
-
-// --------------------------------------------------
-// YOUTUBE PLAYBACK
-// --------------------------------------------------
-
 function playYouTube(data){
-
 
     if(
         !youtubeTab ||
@@ -878,30 +471,21 @@ function playYouTube(data){
         youtubeTab =
             window.open(
                 data.url,
-                "NovaYouTube"
+                "MiuhYouTube"
             );
 
-    }
-    else{
+    }else{
 
         youtubeTab.location.href =
             data.url;
 
         youtubeTab.focus();
-
     }
-
 
     status.textContent =
         "Playing";
-
 }
-
-
 </script>
-
-
-</body>
 
 </body>
 </html>
