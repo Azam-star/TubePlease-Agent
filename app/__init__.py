@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
@@ -17,42 +15,58 @@ def create_app():
 
     app = Flask(__name__)
 
+    # Enable CORS
     CORS(app)
 
-
+    # --------------------------------
     # YouTube
+    # --------------------------------
+
     app.register_blueprint(
         youtube_bp,
         url_prefix="/youtube"
     )
 
-
+    # --------------------------------
     # Home
+    # --------------------------------
+
     @app.route("/")
     def home():
+        return render_template(
+            "index.html"
+        )
 
-        return render_template("index.html")
-
-
+    # --------------------------------
     # HTML
+    # --------------------------------
+
     @app.route("/html")
     def html():
+        return render_template(
+            "index.html"
+        )
 
-        return render_template("index.html")
+    # --------------------------------
+    # Health check
+    # --------------------------------
 
-
-    # Health
     @app.route("/health")
     def health():
 
         return jsonify({
             "status": "ok",
-            "service": "Nova AI Agent"
+            "service": "Miuh AI Agent"
         })
 
-
+    # --------------------------------
     # Gmail AI Agent
-    @app.route("/agent", methods=["POST"])
+    # --------------------------------
+
+    @app.route(
+        "/agent",
+        methods=["POST"]
+    )
     def agent():
 
         try:
@@ -61,11 +75,9 @@ def create_app():
                 silent=True
             ) or {}
 
-            command = data.get(
-                "command",
-                ""
+            command = str(
+                data.get("command", "")
             ).strip()
-
 
             if not command:
 
@@ -74,7 +86,6 @@ def create_app():
                     "message": "Command is required"
                 }), 400
 
-
             if not is_email_command(command):
 
                 return jsonify({
@@ -82,16 +93,13 @@ def create_app():
                     "message": "Please give a Gmail command."
                 }), 400
 
-
             recipient = extract_email(
                 command
             )
 
-
             email = generate_email_with_gemini(
                 command
             )
-
 
             return jsonify({
 
@@ -114,13 +122,16 @@ def create_app():
                 )
             })
 
-
         except Exception as e:
+
+            print(
+                "Agent error:",
+                repr(e)
+            )
 
             return jsonify({
                 "success": False,
                 "message": str(e)
             }), 500
-
 
     return app
