@@ -1,67 +1,100 @@
 import re
 import urllib.parse
 import urllib.request
+import json
 
 
 def get_vid(query):
+    """
+    Search YouTube and return the first video ID.
+    """
 
     try:
-        encoded = urllib.parse.quote(query)
+        query = query.strip()
 
-        url = (
-            "https://www.youtube.com/results"
-            "?search_query=" + encoded
-        )
+        if not query:
+            return None
+
+        encoded = urllib.parse.quote_plus(query)
+
+        url = f"https://www.youtube.com/results?search_query={encoded}"
 
         request = urllib.request.Request(
             url,
             headers={
-                "User-Agent": "Mozilla/5.0"
-            }
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) "
+                    "Chrome/140.0.0.0 Safari/537.36"
+                ),
+                "Accept-Language": "en-US,en;q=0.9",
+            },
         )
 
-        data = urllib.request.urlopen(
-            request,
-            timeout=5
-        ).read().decode("utf-8", errors="ignore")
+        with urllib.request.urlopen(request, timeout=10) as response:
+            data = response.read().decode(
+                "utf-8",
+                errors="ignore"
+            )
 
+        # Method 1: normal YouTube videoId
         ids = re.findall(
-            r'"videoId":"([^"]+)"',
+            r'"videoId":"([A-Za-z0-9_-]{11})"',
             data
         )
 
-        return ids[0] if ids else None
+        if ids:
+            return ids[0]
 
-    except Exception:
+        # Method 2: escaped JSON
+        ids = re.findall(
+            r'\\"videoId\\":\\"([A-Za-z0-9_-]{11})\\"',
+            data
+        )
+
+        if ids:
+            return ids[0]
+
+        return None
+
+    except Exception as e:
+        print("YouTube search error:", repr(e))
         return None
 
 
 def create_youtube_url(command):
+    """
+    Convert a voice command into a YouTube embed URL.
+    """
 
-    text = command.lower().strip()
+    if not command:
+        return None
+
+    original_command = command.strip()
+    text = original_command.lower()
 
     patterns = [
         r"play\s+song\s+(.+)",
         r"play\s+music\s+(.+)",
+        r"play\s+youtube\s+(.+)",
+        r"youtube\s+(.+)",
         r"play\s+(.+)",
-        r"youtube\s+(.+)"
     ]
 
-    query = command
+    query = original_command
 
     for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text
-        )
+        match = re.search(pattern, text)
 
         if match:
-
-            query = match.group(1)
+            query = original_command[match.start(1):].strip()
             break
 
     query = query.strip()
+
+    if not query:
+        return None
 
     video_id = get_vid(query)
 
@@ -69,7 +102,7 @@ def create_youtube_url(command):
         return None
 
     return (
-        "https://www.youtube.com/embed/"
-        + video_id
-        + "?autoplay=1&mute=0"
+        f"https://www.youtube.com/embed/{video_id}"
+        "?autoplay=1"
+        "&rel=0"
     )
