@@ -22,6 +22,7 @@ An intelligent Flask-based assistant that turns natural-language commands into *
 <br>
 
 [![GitHub](https://img.shields.io/badge/View%20Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Azam-star/TubePlease-Agent)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-00C853?style=for-the-badge&logo=render&logoColor=white)](https://agent-ws2.onrender.com/)
 
 </div>
 
@@ -338,6 +339,16 @@ The YouTube blueprint exposes `/youtube/play` and returns an embed URL when a ma
 ---
 
 # 🚀 Getting Started
+
+## 🌐 Try it Live
+
+No setup needed — the app is deployed here:
+
+**👉 [https://agent-ws2.onrender.com/](https://agent-ws2.onrender.com/)**
+
+> ⚠️ Hosted on Render's free tier — the first request after a period of inactivity may take up to a minute to spin the server back up.
+
+---
 
 ## 1️⃣ Clone the repository
 
