@@ -12,16 +12,16 @@ An intelligent Flask-based assistant that turns natural-language commands into *
 
 <br>
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.1.1-000000?style=for-the-badge\&logo=flask\&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge\&logo=google\&logoColor=white)
-![YouTube](https://img.shields.io/badge/YouTube-Integration-FF0000?style=for-the-badge\&logo=youtube\&logoColor=white)
-![Gmail](https://img.shields.io/badge/Gmail-Integration-EA4335?style=for-the-badge\&logo=gmail\&logoColor=white)
-![Gunicorn](https://img.shields.io/badge/Gunicorn-Production-499848?style=for-the-badge\&logo=gunicorn\&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.1.1-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![YouTube](https://img.shields.io/badge/YouTube-Integration-FF0000?style=for-the-badge&logo=youtube&logoColor=white)
+![Gmail](https://img.shields.io/badge/Gmail-Integration-EA4335?style=for-the-badge&logo=gmail&logoColor=white)
+![Gunicorn](https://img.shields.io/badge/Gunicorn-Production-499848?style=for-the-badge&logo=gunicorn&logoColor=white)
 
 <br>
 
-[![GitHub](https://img.shields.io/badge/View%20Repository-181717?style=for-the-badge\&logo=github\&logoColor=white)](https://github.com/Azam-star/TubePlease-Agent)
+[![GitHub](https://img.shields.io/badge/View%20Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Azam-star/TubePlease-Agent)
 
 </div>
 
@@ -194,7 +194,7 @@ before returning the generated email.
 # ⚙️ Technology Stack
 
 | Technology       | Purpose                   |
-| ---------------- | ------------------------- |
+| ---------------- | ------------------------ |
 | 🐍 Python        | Core programming language |
 | 🌐 Flask         | Backend web framework     |
 | 🤖 Google Gemini | AI email generation       |
